@@ -20,7 +20,12 @@ const musicData = [
   { artist: 'Justin Bieber', name: 'Purpose', sales: 554000 }
 ];
 
-// map array to new array with simple array with strings of multidemensional array
+//
+// Use the provided music data array and the .map() method to create a new array that contains items in the format:
+//
+// <album-name> by <artist> sold <sales> copies
+// Store the new array in an albumSalesStrings array. So the first item in the albumSalesStrings array should be "25 by Adele sold 1731000 copies"
+
 const albumSalesStrings = musicData.map(object => `${object.name} by ${object.artist} sold ${object.sales} copies`);
 
 // view results
