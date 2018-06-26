@@ -2,6 +2,18 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+/* Using .filter()
+ *
+ * Using the musicData array and .filter():
+ *   - return only album objects where the album's name is
+ *     10 characters long, 25 characters long, or anywhere in between
+ *   - store the returned data in a new `results` variable
+ *
+ * Note:
+ *   - do not delete the musicData variable
+ *   - do not alter any of the musicData content
+ */
+
 const musicData = [
     { artist: 'Adele', name: '25', sales: 1731000 },
     { artist: 'Drake', name: 'Views', sales: 1608000 },
@@ -16,8 +28,6 @@ const musicData = [
     { artist: 'Justin Bieber', name: 'Purpose', sales: 554000 }
 ];
 
-
-// Use the provided music data array and the .filter() method to create a new array that only contains albums with names between 10 and 25 characters long. Store the new array in a variable called results.
 const results = musicData.filter( object => object.name.length >= 10 && object.name.length <= 25 );
 
 console.log(results);

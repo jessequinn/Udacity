@@ -3,32 +3,35 @@ import ReactDOM from "react-dom";
 import logo from './logo.svg';
 import './App.css';
 
-// array of objects related to music
-const musicData = [
-  { artist: 'Adele', name: '25', sales: 1731000 },
-  { artist: 'Drake', name: 'Views', sales: 1608000 },
-  { artist: 'Beyonce', name: 'Lemonade', sales: 1554000 },
-  { artist: 'Chris Stapleton', name: 'Traveller', sales: 1085000 },
-  { artist: 'Pentatonix', name: 'A Pentatonix Christmas', sales: 904000 },
-  {
-    artist: 'Original Broadway Cast Recording',
-    name: 'Hamilton: An American Musical', sales: 820000
-  },
-  { artist: 'Twenty One Pilots', name: 'Blurryface', sales: 738000 },
-  { artist: 'Prince', name: 'The Very Best of Prince', sales: 668000 },
-  { artist: 'Rihanna', name: 'Anti', sales: 603000 },
-  { artist: 'Justin Bieber', name: 'Purpose', sales: 554000 }
-];
+/* Using .map()
+ *
+ * Using the musicData array and .map():
+ *   - return a string for each item in the array in the following format
+ *     <album-name> by <artist> sold <sales> copies
+ *   - store the returned data in a new albumSalesStrings variable
+ *
+ * Note:
+ *   - do not delete the musicData variable
+ *   - do not alter any of the musicData content
+ *   - do not format the sales number, leave it as a long string of digits
+ */
 
-//
-// Use the provided music data array and the .map() method to create a new array that contains items in the format:
-//
-// <album-name> by <artist> sold <sales> copies
-// Store the new array in an albumSalesStrings array. So the first item in the albumSalesStrings array should be "25 by Adele sold 1731000 copies"
+const musicData = [
+    { artist: 'Adele', name: '25', sales: 1731000 },
+    { artist: 'Drake', name: 'Views', sales: 1608000 },
+    { artist: 'Beyonce', name: 'Lemonade', sales: 1554000 },
+    { artist: 'Chris Stapleton', name: 'Traveller', sales: 1085000 },
+    { artist: 'Pentatonix', name: 'A Pentatonix Christmas', sales: 904000 },
+    { artist: 'Original Broadway Cast Recording',
+      name: 'Hamilton: An American Musical', sales: 820000 },
+    { artist: 'Twenty One Pilots', name: 'Blurryface', sales: 738000 },
+    { artist: 'Prince', name: 'The Very Best of Prince', sales: 668000 },
+    { artist: 'Rihanna', name: 'Anti', sales: 603000 },
+    { artist: 'Justin Bieber', name: 'Purpose', sales: 554000 }
+];
 
 const albumSalesStrings = musicData.map(object => `${object.name} by ${object.artist} sold ${object.sales} copies`);
 
-// view results
 console.log(albumSalesStrings);
 
 class App extends Component {
