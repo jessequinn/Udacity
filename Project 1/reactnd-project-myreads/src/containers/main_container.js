@@ -1,100 +1,99 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import propTypes from "prop-types";
+import sortBy from "sort-by";
+import * as BooksAPI from "../actions/books_api";
 
 export default class MainContainer extends Component {
   static propTypes = {
-    onAddCurrent: propTypes.func.isRequired,
-    currentBooks: propTypes.array.isRequired,
-    onAddWanted: propTypes.func.isRequired,
-    wantedBooks: propTypes.array.isRequired,
-    onAddRead: propTypes.func.isRequired,
-    onRemoveBook: propTypes.func.isRequired,
-    readBooks: propTypes.array.isRequired
+    books: propTypes.array.isRequired
   };
 
-  BookDialog(Books) {
+  update(book, shelf) {
+    this.onUpdateBooks = BooksAPI.update(book, shelf)
+  }
+
+  BookDialog(books, shelf) {
     return (
       <div className="row">
         <div className="col">
-          <div className="card-columns">
-            {Books.map(book => (
-              <div className="card" key={book.id}>
-                <img
-                  className="card-img-top"
-                  src={book.imageLinks.smallThumbnail}
-                  alt="Card image cap"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">{book.title}</h5>
-                  <h6 className="card-subtitle mb-2 text-muted">
-                    {book.subtitle}
-                  </h6>
-                  <p className="card-text">{book.authors.join(", ")}</p>
-                  <div
-                    className="btn-group"
-                    role="group"
-                    aria-label="Basic example"
-                  >
-                    <button
-                      onClick={() => this.props.onAddCurrent(book)}
-                      type="button"
-                      className="btn btn-warning btn-sm"
-                      disabled={
-                        this.props.currentBooks.find(e => e.id === book.id)
-                          ? "disabled"
-                          : null
-                      }
+          {!books.error && (
+            <div className="card-columns">
+              {books.filter((book) => book.shelf === shelf).map((book) => (
+                <div className="card" key={book.id}>
+                  {book.imageLinks.smallThumbnail && (
+                    <img
+                      className="card-img-top"
+                      src={book.imageLinks.smallThumbnail}
+                      alt="Card image cap"
+                    />
+                  )}
+                  <div className="card-body">
+                    {book.title && (
+                      <h5 className="card-title">{book.title}</h5>
+                    )}
+                    {book.subtitle && (
+                      <h6 className="card-subtitle mb-2 text-muted">
+                        {book.subtitle}
+                      </h6>
+                    )}
+                    {book.authors && (
+                      <p className="card-text">{book.authors.join(", ")}</p>
+                    )}
+                    <div
+                      className="btn-group"
+                      role="group"
+                      aria-label="Basic example"
                     >
-                      <i className="fab fa-readme" />
-                    </button>
-                    <button
-                      onClick={() => this.props.onAddWanted(book)}
-                      type="button"
-                      className="btn btn-warning btn-sm"
-                      disabled={
-                        this.props.wantedBooks.find(e => e.id === book.id)
-                          ? "disabled"
-                          : null
-                      }
-                    >
-                      <i className="fas fa-book" />
-                    </button>
-                    <button
-                      onClick={() => this.props.onAddRead(book)}
-                      type="button"
-                      className="btn btn-warning btn-sm"
-                      disabled={
-                        this.props.readBooks.find(e => e.id === book.id)
-                          ? "disabled"
-                          : null
-                      }
-                    >
-                      <i className="fas fa-archive" />
-                    </button>
-                    <button
-                      onClick={() => this.props.onRemoveBook(book)}
-                      type="button"
-                      className="btn btn-danger btn-sm"
-                    >
-                      <i className="fas fa-trash-alt" />
-                    </button>
+                      <button
+                        onClick={() => this.update(book, "currentlyReading")}
+                        type="button"
+                        className="btn btn-warning btn-sm"
+                        disabled={
+                          book.shelf === "currentlyReading"
+                            ? "disabled"
+                            : null
+                        }
+                      >
+                        <i className="fas fa-book" />
+                      </button>
+                      <button
+                        onClick={() => this.update(book, "wantToRead")}
+                        type="button"
+                        className="btn btn-warning btn-sm"
+                        disabled={
+                          book.shelf === "wantToRead"
+                            ? "disabled"
+                            : null
+                        }
+                      >
+                        <i className="fab fa-readme" />
+                      </button>
+                      <button
+                        onClick={() => this.update(book, "read")}
+                        type="button"
+                        className="btn btn-warning btn-sm"
+                        disabled={
+                          book.shelf === "read"
+                            ? "disabled"
+                            : null
+                        }
+                      >
+                        <i className="fas fa-archive" />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     );
   }
 
   render() {
-    const {
-      currentBooks,
-      wantedBooks,
-      readBooks
-    } = this.props;
+    const { books } = this.props;
 
     return (
       <div className="container">
@@ -115,19 +114,19 @@ export default class MainContainer extends Component {
             <h4>Current Reading</h4>
           </div>
         </div>
-        {this.BookDialog(currentBooks)}
+        {this.BookDialog(books,"currentlyReading")}
         <div className="row">
           <div className="col">
             <h4>Want to Read</h4>
           </div>
         </div>
-        {this.BookDialog(wantedBooks)}
+        {this.BookDialog(books, "wantToRead")}
         <div className="row">
           <div className="col">
             <h4>Read</h4>
           </div>
         </div>
-        {this.BookDialog(readBooks)}
+        {this.BookDialog(books, "read")}
       </div>
     );
   }

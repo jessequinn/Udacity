@@ -7,10 +7,7 @@ import MainContainer from "../containers/main_container";
 
 export default class App extends Component {
   state = {
-    books: [],
-    current: [],
-    wanted: [],
-    read: []
+    books: []
   };
 
   componentDidMount() {
@@ -19,53 +16,11 @@ export default class App extends Component {
     });
   }
 
-  addCurrent = book => {
+  updateBooks = books => {
     this.setState(state => ({
-      wanted: state.wanted.filter(b => b.id !== book.id)
+      books: state.books
     }));
-    this.setState(state => ({
-      read: state.read.filter(b => b.id !== book.id)
-    }));
-    this.setState(state => ({
-      current: state.current.concat([book])
-    }));
-  };
-
-  addWanted = book => {
-    this.setState(state => ({
-      current: state.current.filter(b => b.id !== book.id)
-    }));
-    this.setState(state => ({
-      read: state.read.filter(b => b.id !== book.id)
-    }));
-    this.setState(state => ({
-      wanted: state.wanted.concat([book])
-    }));
-  };
-
-  addRead = book => {
-    this.setState(state => ({
-      current: state.current.filter(b => b.id !== book.id)
-    }));
-    this.setState(state => ({
-      wanted: state.wanted.filter(b => b.id !== book.id)
-    }));
-    this.setState(state => ({
-      read: state.read.concat([book])
-    }));
-  };
-
-  removeBook = book => {
-    this.setState(state => ({
-      current: state.current.filter(b => b.id !== book.id)
-    }));
-    this.setState(state => ({
-      wanted: state.wanted.filter(b => b.id !== book.id)
-    }));
-    this.setState(state => ({
-      read: state.read.filter(b => b.id !== book.id)
-    }));
-  };
+  }
 
   render() {
     return (
@@ -73,30 +28,14 @@ export default class App extends Component {
         <Route
           path="/search"
           render={() => (
-            <Search
-              books={this.state.books}
-              onAddCurrent={this.addCurrent}
-              onAddWanted={this.addWanted}
-              onAddRead={this.addRead}
-              currentBooks={this.state.current}
-              wantedBooks={this.state.wanted}
-              readBooks={this.state.read}
-            />
+            <Search />
           )}
         />
         <Route
           path="/"
           render={() => (
             <div className="container">
-              <MainContainer
-                onRemoveBook={this.removeBook}
-                onAddCurrent={this.addCurrent}
-                onAddWanted={this.addWanted}
-                onAddRead={this.addRead}
-                currentBooks={this.state.current}
-                wantedBooks={this.state.wanted}
-                readBooks={this.state.read}
-              />
+              <MainContainer books={this.state.books} onUpdateBooks={this.updateBooks}/>
             </div>
           )}
         />
