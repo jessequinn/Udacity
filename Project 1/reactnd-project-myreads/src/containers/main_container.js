@@ -1,25 +1,20 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import propTypes from "prop-types";
-import sortBy from "sort-by";
-import * as BooksAPI from "../actions/books_api";
+import PropTypes from "prop-types";
 
 export default class MainContainer extends Component {
   static propTypes = {
-    books: propTypes.array.isRequired
+    booksShelved: PropTypes.array.isRequired,
+    onChangeBookshelf: PropTypes.func.isRequired
   };
 
-  update(book, shelf) {
-    this.onUpdateBooks = BooksAPI.update(book, shelf)
-  }
-
-  BookDialog(books, shelf) {
+  bookDialog(onChangeBookshelf, books, shelf) {
     return (
       <div className="row">
         <div className="col">
           {!books.error && (
             <div className="card-columns">
-              {books.filter((book) => book.shelf === shelf).map((book) => (
+              {books.filter(book => book.shelf === shelf).map(book => (
                 <div className="card" key={book.id}>
                   {book.imageLinks.smallThumbnail && (
                     <img
@@ -29,9 +24,7 @@ export default class MainContainer extends Component {
                     />
                   )}
                   <div className="card-body">
-                    {book.title && (
-                      <h5 className="card-title">{book.title}</h5>
-                    )}
+                    {book.title && <h5 className="card-title">{book.title}</h5>}
                     {book.subtitle && (
                       <h6 className="card-subtitle mb-2 text-muted">
                         {book.subtitle}
@@ -46,40 +39,47 @@ export default class MainContainer extends Component {
                       aria-label="Basic example"
                     >
                       <button
-                        onClick={() => this.update(book, "currentlyReading")}
+                        onClick={() =>
+                          onChangeBookshelf(book, "currentlyReading")
+                        }
                         type="button"
                         className="btn btn-warning btn-sm"
                         disabled={
-                          book.shelf === "currentlyReading"
-                            ? "disabled"
-                            : null
+                          book.shelf === "currentlyReading" ? "disabled" : null
                         }
                       >
-                        <i className="fas fa-book" />
+                        <i
+                          className="fab fa-readme"
+                          title="Currently Reading"
+                        />
                       </button>
                       <button
-                        onClick={() => this.update(book, "wantToRead")}
+                        onClick={() => onChangeBookshelf(book, "wantToRead")}
                         type="button"
                         className="btn btn-warning btn-sm"
                         disabled={
-                          book.shelf === "wantToRead"
-                            ? "disabled"
-                            : null
+                          book.shelf === "wantToRead" ? "disabled" : null
                         }
                       >
-                        <i className="fab fa-readme" />
+                        <i className="fas fa-book" title="Want to Read" />
                       </button>
                       <button
-                        onClick={() => this.update(book, "read")}
+                        onClick={() => onChangeBookshelf(book, "read")}
                         type="button"
                         className="btn btn-warning btn-sm"
+                        disabled={book.shelf === "read" ? "disabled" : null}
+                      >
+                        <i className="fas fa-archive" title="Read" />
+                      </button>
+                      <button
+                        onClick={() => onChangeBookshelf(book, "none")}
+                        type="button"
+                        className="btn btn-danger btn-sm"
                         disabled={
-                          book.shelf === "read"
-                            ? "disabled"
-                            : null
+                          !book.hasOwnProperty("shelf") ? "disabled" : null
                         }
                       >
-                        <i className="fas fa-archive" />
+                        <i className="fas fa-trash-alt" title="Remove - None" />
                       </button>
                     </div>
                   </div>
@@ -93,7 +93,9 @@ export default class MainContainer extends Component {
   }
 
   render() {
-    const { books } = this.props;
+
+    const {onChangeBookshelf, booksShelved } = this.props
+    console.log(booksShelved.map(c => `Book id: ${c.id}`));
 
     return (
       <div className="container">
@@ -114,19 +116,25 @@ export default class MainContainer extends Component {
             <h4>Current Reading</h4>
           </div>
         </div>
-        {this.BookDialog(books,"currentlyReading")}
+        {booksShelved
+          ? this.bookDialog(onChangeBookshelf, booksShelved, "currentlyReading")
+          : null}
         <div className="row">
           <div className="col">
             <h4>Want to Read</h4>
           </div>
         </div>
-        {this.BookDialog(books, "wantToRead")}
+        {booksShelved
+          ? this.bookDialog(onChangeBookshelf, booksShelved, "wantToRead")
+          : null}
         <div className="row">
           <div className="col">
             <h4>Read</h4>
           </div>
         </div>
-        {this.BookDialog(books, "read")}
+        {booksShelved
+          ? this.bookDialog(onChangeBookshelf, booksShelved, "read")
+          : null}
       </div>
     );
   }
