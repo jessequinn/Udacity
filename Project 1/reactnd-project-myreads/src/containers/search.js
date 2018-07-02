@@ -1,51 +1,22 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import * as BooksAPI from "../actions/books_api";
 import PropTypes from "prop-types";
-// import { DebounceInput } from 'react-debounce-input';
+import sortBy from "sort-by";
 
 export default class Search extends Component {
   static propTypes = {
     booksShelved: PropTypes.array.isRequired,
-    onFetchBooksFromAPI: PropTypes.func.isRequired,
-    onChangeBookshelf: PropTypes.func.isRequired
+    onSearchBooks: PropTypes.func.isRequired,
+    onChangeBookshelf: PropTypes.func.isRequired,
+    searchResults: PropTypes.array.isRequired
   };
 
   state = {
-    query: "",
-    searchResults: []
+    query: ""
   };
 
-  // componentDidMount() {
-  //   if (this.props.booksShelved.length === 0) {
-  //     this.props.onFetchBooksFromAPI();
-  //   }
-  //
-  //   this.searchBooks();
-  // }
-  //
   componentDidMount() {
     this.clearQuery();
-  }
-
-  searchBooks(query) {
-    if (!query) {
-      return;
-    }
-
-    BooksAPI.search(query).then(searchResults => {
-      if (searchResults.error) {
-        this.setState({
-          searchResults: []
-        });
-      } else {
-        this.setState({
-          searchResults
-        });
-      }
-    });
-
-    return this.state.searchResults;
   }
 
   processQueryString(query) {
@@ -57,32 +28,27 @@ export default class Search extends Component {
   }
 
   updateQuery(query) {
-    query = this.processQueryString(query);
     this.setState({ query });
-    this.searchBooks(query);
   }
 
   clearQuery() {
     this.setState({ query: "" });
   }
 
-  clearSearchResults() {
-    this.setState({ searchResults: [] });
-  }
-
   render() {
     const { query } = this.state;
-    const { onChangeBookshelf } = this.props;
+    const { onChangeBookshelf, onSearchBooks, searchResults } = this.props;
 
     let showingBooks;
     if (query) {
       const match = this.processQueryString(query);
-      showingBooks = this.searchBooks(match);
+      onSearchBooks(match);
+      showingBooks = searchResults;
     } else {
       showingBooks = [];
     }
 
-    //console.log(showingBooks.map(c => `Book shelf: ${c.shelf}`));
+    showingBooks.sort(sortBy("id"));
 
     return (
       <div className="container">
@@ -114,7 +80,7 @@ export default class Search extends Component {
                       <img
                         className="card-img-top"
                         src={book.imageLinks.smallThumbnail}
-                        alt="Card image cap"
+                        alt="Card cap"
                       />
                     )}
                     <div className="card-body">

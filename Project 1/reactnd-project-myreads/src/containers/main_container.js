@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import sortBy from "sort-by";
 
 export default class MainContainer extends Component {
   static propTypes = {
@@ -9,6 +10,8 @@ export default class MainContainer extends Component {
   };
 
   bookDialog(onChangeBookshelf, books, shelf) {
+    books.sort(sortBy("id"));
+
     return (
       <div className="row">
         <div className="col">
@@ -20,7 +23,7 @@ export default class MainContainer extends Component {
                     <img
                       className="card-img-top"
                       src={book.imageLinks.smallThumbnail}
-                      alt="Card image cap"
+                      alt="Card cap"
                     />
                   )}
                   <div className="card-body">
@@ -93,9 +96,7 @@ export default class MainContainer extends Component {
   }
 
   render() {
-
-    const {onChangeBookshelf, booksShelved } = this.props
-    console.log(booksShelved.map(c => `Book id: ${c.id}`));
+    const { onChangeBookshelf, booksShelved } = this.props;
 
     return (
       <div className="container">
@@ -114,6 +115,7 @@ export default class MainContainer extends Component {
         <div className="row">
           <div className="col">
             <h4>Current Reading</h4>
+            <hr />
           </div>
         </div>
         {booksShelved
@@ -122,6 +124,7 @@ export default class MainContainer extends Component {
         <div className="row">
           <div className="col">
             <h4>Want to Read</h4>
+            <hr />
           </div>
         </div>
         {booksShelved
@@ -130,6 +133,7 @@ export default class MainContainer extends Component {
         <div className="row">
           <div className="col">
             <h4>Read</h4>
+            <hr />
           </div>
         </div>
         {booksShelved

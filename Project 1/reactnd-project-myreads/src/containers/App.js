@@ -1,21 +1,20 @@
+import _ from "lodash";
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import * as BooksAPI from "../actions/books_api";
 
+import test from "../containers/test.js";
 import Search from "../containers/search";
 import MainContainer from "../containers/main_container";
 
 export default class App extends Component {
   state = {
-    booksShelved: []
+    booksShelved: [],
+    searchResults: []
   };
 
   componentDidMount() {
     this.fetchBooksFromAPI();
-  }
-
-  componentWillUnmount() {
-    this.isCancelled = true;
   }
 
   fetchBooksFromAPI() {
@@ -47,7 +46,7 @@ export default class App extends Component {
       book.shelf = newShelf;
       this.setState(prevState => ({
         booksShelved: prevState.booksShelved
-          .filter(aBook => aBook.id !== book.id)
+          .filter(b => b.id !== book.id)
           .concat([book])
       }));
     }
@@ -63,9 +62,39 @@ export default class App extends Component {
     });
   }
 
+  searchBooks(query) {
+    if (!query) {
+      return;
+    }
+
+    BooksAPI.search(query).then(searchResults => {
+      if (searchResults.error) {
+        this.setState({
+          searchResults: []
+        });
+      } else {
+        this.setState({
+          searchResults
+        });
+      }
+    });
+    this.processedSearchResults()
+  }
+
+  processedSearchResults() {
+    const bookIds = _.map(this.state.searchResults, 'id');
+    const processedBookIds = _.differenceWith(this.state.booksShelved, bookIds);
+    const removedBookIds = _.map(this.state.booksShelved, 'id');
+    const newArray = _.remove(this.state.searchResults, obj => removedBookIds.indexOf(obj.id) > -1);
+    console.log(newArray);
+  }
+
   render() {
+    const searchBooks = _.debounce((query) => { this.searchBooks(query) }, 2000);
+
     return (
       <Switch>
+        <Route path="/test" component={test} />
         <Route
           path="/search"
           render={() => (
@@ -74,7 +103,8 @@ export default class App extends Component {
                 this.changeBookshelf(book, newShelf);
               }}
               booksShelved={this.state.booksShelved}
-              onFetchBooksFromAPI={this.fetchBooksFromAPI}
+              onSearchBooks={searchBooks}
+              searchResults={this.state.searchResults}
             />
           )}
         />
