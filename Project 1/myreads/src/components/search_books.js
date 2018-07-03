@@ -1,5 +1,4 @@
 import _ from "lodash";
-import sortBy from "sort-by";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import * as BooksAPI from "../actions/books_api";
@@ -34,8 +33,14 @@ class SearchBooks extends Component {
 
   deleteBook = (book, response) => {
     if (!this.isInDB(book.id, response)) {
+      book.shelf = "none";
       this.setState(prevState => ({
-        shelvedBooks: prevState.shelvedBooks.filter(b => b.id !== book.id)
+        shelvedBooks: prevState.shelvedBooks.filter(b => b.id !== book.id),
+        formattedResults: _.sortBy(
+          prevState.formattedResults
+            .filter(b => b.id !== book.id)
+            .concat([book])
+        )
       }));
     }
   };
@@ -74,9 +79,14 @@ class SearchBooks extends Component {
       this.setState({ searchResults: [], formattedResults: [] });
     } else {
       BooksAPI.search(this.processQueryString(query)).then(searchResults => {
-        if (!searchResults || typeof searchResults === undefined) {
+        if (
+          !searchResults ||
+          typeof searchResults === undefined ||
+          searchResults.error === "empty query"
+        ) {
           this.setState({
-            searchResults: []
+            searchResults: [],
+            formattedResults: []
           });
         } else {
           this.setState({
@@ -91,24 +101,24 @@ class SearchBooks extends Component {
           this.setState({
             formattedResults
           });
-        }
 
-        const newBooksAPIdata = this.state.formattedResults.filter(f => {
-          return this.state.shelvedBooks.every(s => {
-            return s.id !== f.id;
+          const newFormattedResults = this.state.formattedResults.filter(f => {
+            return this.state.shelvedBooks.every(s => {
+              return s.id !== f.id;
+            });
           });
-        });
 
-        this.setState({
-          formattedResults: _.concat(newBooksAPIdata, this.state.shelvedBooks)
-        });
+          this.setState({
+            formattedResults: _.sortBy(
+              _.concat(newFormattedResults, this.state.shelvedBooks)
+            )
+          });
+        }
       });
     }
   };
 
-  printBooks = (books) => {
-    books.sort(sortBy("title"));
-
+  printBooks = books => {
     return (
       <div className="row">
         <div className="col">
@@ -124,9 +134,7 @@ class SearchBooks extends Component {
                     />
                   )}
                   <div className="card-body">
-                    {book.title && (
-                      <h5 className="card-title">{book.title}</h5>
-                    )}
+                    {book.title && <h5 className="card-title">{book.title}</h5>}
                     {book.subtitle && (
                       <h6 className="card-subtitle mb-2 text-muted">
                         {book.subtitle}
@@ -147,9 +155,7 @@ class SearchBooks extends Component {
                         type="button"
                         className="btn btn-warning btn-sm"
                         disabled={
-                          book.shelf === "currentlyReading"
-                            ? "disabled"
-                            : null
+                          book.shelf === "currentlyReading" ? "disabled" : null
                         }
                       >
                         <i
@@ -158,9 +164,7 @@ class SearchBooks extends Component {
                         />
                       </button>
                       <button
-                        onClick={() =>
-                          this.changeBookshelf(book, "wantToRead")
-                        }
+                        onClick={() => this.changeBookshelf(book, "wantToRead")}
                         type="button"
                         className="btn btn-warning btn-sm"
                         disabled={
@@ -182,13 +186,12 @@ class SearchBooks extends Component {
                         type="button"
                         className="btn btn-danger btn-sm"
                         disabled={
-                          !book.hasOwnProperty("shelf") || book.shelf ==="none" ? "disabled" : null
+                          !book.hasOwnProperty("shelf") || book.shelf === "none"
+                            ? "disabled"
+                            : null
                         }
                       >
-                        <i
-                          className="fas fa-trash-alt"
-                          title="Remove - None"
-                        />
+                        <i className="fas fa-trash-alt" title="Remove - None" />
                       </button>
                     </div>
                   </div>
@@ -198,8 +201,8 @@ class SearchBooks extends Component {
           )}
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   search = _.debounce(query => {
     this.searchBooks(query);

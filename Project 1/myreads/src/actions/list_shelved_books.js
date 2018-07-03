@@ -1,8 +1,8 @@
+import _ from "lodash";
 import React from "react";
-import sortBy from "sort-by";
 
 export const listShelvedBooks = (onChangeBookShelf, books, shelf) => {
-  books.sort(sortBy("title"));
+  books = _.orderBy(books, ["id"], ["asc"]);
 
   return (
     <div className="container">
