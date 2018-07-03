@@ -3,14 +3,15 @@ import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import * as BooksAPI from "../actions/books_api";
 
-import test from "../containers/test.js";
-import Search from "../containers/search";
+import SearchBar from "../components/search_bar";
+import BookList from "../components/book_list";
 import MainContainer from "../containers/main_container";
 
 export default class App extends Component {
   state = {
     booksShelved: [],
-    searchResults: []
+    searchResults: [],
+    processedBooks: []
   };
 
   componentDidMount() {
@@ -38,6 +39,7 @@ export default class App extends Component {
       this.setState(prevState => ({
         booksShelved: prevState.booksShelved.filter(b => b.id !== book.id)
       }));
+      this.processedSearchResults();
     }
   }
 
@@ -78,34 +80,46 @@ export default class App extends Component {
         });
       }
     });
-    this.processedSearchResults()
+    this.processedSearchResults();
   }
 
   processedSearchResults() {
-    const bookIds = _.map(this.state.searchResults, 'id');
-    const processedBookIds = _.differenceWith(this.state.booksShelved, bookIds);
-    const removedBookIds = _.map(this.state.booksShelved, 'id');
-    const newArray = _.remove(this.state.searchResults, obj => removedBookIds.indexOf(obj.id) > -1);
-    console.log(newArray);
+    let processedBooks = this.state.searchResults;
+    console.log(processedBooks);
+    if (_.isEmpty(this.state.booksShelved)) {
+      _.remove(processedBooks, obj => _.map(this.state.booksShelved, "id").includes(obj.id));
+    }
+
+    if (processedBooks.error) {
+      this.setState({
+        processedBooks: []
+      });
+    } else {
+      this.setState({
+        processedBooks: _.concat(processedBooks, this.state.booksShelved)
+      });
+    }
   }
 
   render() {
-    const searchBooks = _.debounce((query) => { this.searchBooks(query) }, 2000);
+    const searchBooks = _.debounce(query => {
+      this.searchBooks(query);
+    }, 300);
 
     return (
       <Switch>
-        <Route path="/test" component={test} />
         <Route
           path="/search"
           render={() => (
-            <Search
-              onChangeBookshelf={(book, newShelf) => {
-                this.changeBookshelf(book, newShelf);
-              }}
-              booksShelved={this.state.booksShelved}
-              onSearchBooks={searchBooks}
-              searchResults={this.state.searchResults}
-            />
+            <div className="container">
+              <SearchBar onSearchTermChange={searchBooks} />
+              <BookList
+                processedBooks={this.state.processedBooks}
+                onChangeBookShelf={(book, newShelf) => {
+                  this.changeBookshelf(book, newShelf);
+                }}
+              />
+            </div>
           )}
         />
         <Route
@@ -113,7 +127,7 @@ export default class App extends Component {
           render={() => (
             <MainContainer
               booksShelved={this.state.booksShelved}
-              onChangeBookshelf={(book, newShelf) => {
+              onChangeBookShelf={(book, newShelf) => {
                 this.changeBookshelf(book, newShelf);
               }}
             />

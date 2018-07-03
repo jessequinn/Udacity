@@ -6,10 +6,10 @@ import sortBy from "sort-by";
 export default class MainContainer extends Component {
   static propTypes = {
     booksShelved: PropTypes.array.isRequired,
-    onChangeBookshelf: PropTypes.func.isRequired
+    onChangeBookShelf: PropTypes.func.isRequired
   };
 
-  bookDialog(onChangeBookshelf, books, shelf) {
+  bookDialog(onChangeBookShelf, books, shelf) {
     books.sort(sortBy("id"));
 
     return (
@@ -43,7 +43,7 @@ export default class MainContainer extends Component {
                     >
                       <button
                         onClick={() =>
-                          onChangeBookshelf(book, "currentlyReading")
+                          onChangeBookShelf(book, "currentlyReading")
                         }
                         type="button"
                         className="btn btn-warning btn-sm"
@@ -57,7 +57,7 @@ export default class MainContainer extends Component {
                         />
                       </button>
                       <button
-                        onClick={() => onChangeBookshelf(book, "wantToRead")}
+                        onClick={() => onChangeBookShelf(book, "wantToRead")}
                         type="button"
                         className="btn btn-warning btn-sm"
                         disabled={
@@ -67,7 +67,7 @@ export default class MainContainer extends Component {
                         <i className="fas fa-book" title="Want to Read" />
                       </button>
                       <button
-                        onClick={() => onChangeBookshelf(book, "read")}
+                        onClick={() => onChangeBookShelf(book, "read")}
                         type="button"
                         className="btn btn-warning btn-sm"
                         disabled={book.shelf === "read" ? "disabled" : null}
@@ -75,7 +75,7 @@ export default class MainContainer extends Component {
                         <i className="fas fa-archive" title="Read" />
                       </button>
                       <button
-                        onClick={() => onChangeBookshelf(book, "none")}
+                        onClick={() => onChangeBookShelf(book, "none")}
                         type="button"
                         className="btn btn-danger btn-sm"
                         disabled={
@@ -96,7 +96,7 @@ export default class MainContainer extends Component {
   }
 
   render() {
-    const { onChangeBookshelf, booksShelved } = this.props;
+    const { onChangeBookShelf, booksShelved } = this.props;
 
     return (
       <div className="container">
@@ -119,7 +119,7 @@ export default class MainContainer extends Component {
           </div>
         </div>
         {booksShelved
-          ? this.bookDialog(onChangeBookshelf, booksShelved, "currentlyReading")
+          ? this.bookDialog(onChangeBookShelf, booksShelved, "currentlyReading")
           : null}
         <div className="row">
           <div className="col">
@@ -128,7 +128,7 @@ export default class MainContainer extends Component {
           </div>
         </div>
         {booksShelved
-          ? this.bookDialog(onChangeBookshelf, booksShelved, "wantToRead")
+          ? this.bookDialog(onChangeBookShelf, booksShelved, "wantToRead")
           : null}
         <div className="row">
           <div className="col">
@@ -137,7 +137,7 @@ export default class MainContainer extends Component {
           </div>
         </div>
         {booksShelved
-          ? this.bookDialog(onChangeBookshelf, booksShelved, "read")
+          ? this.bookDialog(onChangeBookShelf, booksShelved, "read")
           : null}
       </div>
     );
