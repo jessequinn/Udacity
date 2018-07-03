@@ -1,6 +1,9 @@
 import React from "react";
+import sortBy from "sort-by";
 
 export const listShelvedBooks = (onChangeBookShelf, books, shelf) => {
+  books.sort(sortBy("title"));
+
   return (
     <div className="container">
       <div className="row">

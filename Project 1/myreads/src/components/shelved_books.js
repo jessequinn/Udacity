@@ -61,13 +61,13 @@ class ShelvedBooks extends Component {
     const { shelvedBooks } = this.state;
 
     // prints token passed to book API
-    console.log(localStorage.token);
+    // console.log(localStorage.token);
 
     // request an update just incase shelvedBooks is missing books
     // this.fetchBooksFromAPI();
 
     // prints state of shelvedBooks
-    console.log(shelvedBooks);
+    // console.log(shelvedBooks);
 
     return (
       <div className="container">
