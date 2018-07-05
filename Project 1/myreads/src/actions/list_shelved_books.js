@@ -31,7 +31,7 @@ export const listShelvedBooks = (onChangeBookShelf, books, shelf) => {
             <div className="card-columns">
               {books.filter(book => book.shelf === shelf).map(book => (
                 <div className="card" key={book.id}>
-                  {book.imageLinks.smallThumbnail && (
+                  {book.imageLinks && (
                     <img
                       className="card-img-top"
                       src={book.imageLinks.smallThumbnail}

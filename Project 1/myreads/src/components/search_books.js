@@ -1,70 +1,28 @@
 import _ from "lodash";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import * as BooksAPI from "../actions/books_api";
 
 class SearchBooks extends Component {
+  static propTypes = {
+    searchResults: PropTypes.array.isRequired,
+    formattedResults: PropTypes.array.isRequired,
+    onChangeBookshelf: PropTypes.func.isRequired,
+    onClearStates: PropTypes.func.isRequired,
+    onUpdateSearchState: PropTypes.func.isRequired,
+    onUpdateFormattedState: PropTypes.func.isRequired,
+    shelvedBooks: PropTypes.array.isRequired
+  };
+
   state = {
-    term: "",
-    searchResults: [],
-    formattedResults: [],
-    shelvedBooks: []
+    term: ""
   };
 
-  componentDidMount() {
-    this.fetchBooksFromAPI();
+  constructor(props) {
+    super(props);
+    props.onClearStates();
   }
-
-  fetchBooksFromAPI() {
-    BooksAPI.getAll().then(shelvedBooks => {
-      this.setState({ shelvedBooks });
-    });
-  }
-
-  isInDB = (id, response) => {
-    let foundBook = false;
-    for (let shelf in response) {
-      if (shelf.indexOf(id) !== -1) {
-        foundBook = true;
-      }
-    }
-    return foundBook;
-  };
-
-  deleteBook = (book, response) => {
-    if (!this.isInDB(book.id, response)) {
-      book.shelf = "none";
-      this.setState(prevState => ({
-        shelvedBooks: prevState.shelvedBooks.filter(b => b.id !== book.id),
-        formattedResults: _.sortBy(
-          prevState.formattedResults
-            .filter(b => b.id !== book.id)
-            .concat([book])
-        )
-      }));
-    }
-  };
-
-  moveBook = (book, newShelf, response) => {
-    if (response[newShelf].indexOf(book.id) !== -1) {
-      book.shelf = newShelf;
-      this.setState(prevState => ({
-        shelvedBooks: prevState.shelvedBooks
-          .filter(b => b.id !== book.id)
-          .concat([book])
-      }));
-    }
-  };
-
-  changeBookshelf = (book, newShelf) => {
-    BooksAPI.update(book, newShelf).then(response => {
-      if (newShelf === "none") {
-        this.deleteBook(book, response);
-      } else {
-        this.moveBook(book, newShelf, response);
-      }
-    });
-  };
 
   processQueryString = query => {
     return query
@@ -75,8 +33,10 @@ class SearchBooks extends Component {
   };
 
   searchBooks = query => {
+    const { shelvedBooks } = this.props;
+
     if (query === "") {
-      this.setState({ searchResults: [], formattedResults: [] });
+      this.props.onClearStates();
     } else {
       BooksAPI.search(this.processQueryString(query)).then(searchResults => {
         if (
@@ -84,41 +44,34 @@ class SearchBooks extends Component {
           typeof searchResults === undefined ||
           searchResults.error === "empty query"
         ) {
-          this.setState({
-            searchResults: [],
-            formattedResults: []
-          });
+          this.props.onClearStates();
         } else {
-          this.setState({
-            searchResults
-          });
+          this.props.onUpdateSearchState(searchResults);
 
           // add shelf property and with none
           const formattedResults = _.map(searchResults, function(element) {
             return _.extend({}, element, { shelf: "none" });
           });
 
-          this.setState({
-            formattedResults
-          });
+          this.props.onUpdateFormattedState(formattedResults);
 
-          const newFormattedResults = this.state.formattedResults.filter(f => {
-            return this.state.shelvedBooks.every(s => {
+          const newFormattedResults = this.props.formattedResults.filter(f => {
+            return shelvedBooks.every(s => {
               return s.id !== f.id;
             });
           });
 
-          this.setState({
-            formattedResults: _.sortBy(
-              _.concat(newFormattedResults, this.state.shelvedBooks)
-            )
-          });
+          this.props.onUpdateFormattedState(
+            _.sortBy(_.concat(newFormattedResults, shelvedBooks))
+          );
         }
       });
     }
   };
 
   printBooks = books => {
+    const { onChangeBookshelf } = this.props;
+
     return (
       <div className="row">
         <div className="col">
@@ -150,7 +103,7 @@ class SearchBooks extends Component {
                     >
                       <button
                         onClick={() =>
-                          this.changeBookshelf(book, "currentlyReading")
+                          onChangeBookshelf(book, "currentlyReading")
                         }
                         type="button"
                         className="btn btn-warning btn-sm"
@@ -164,7 +117,7 @@ class SearchBooks extends Component {
                         />
                       </button>
                       <button
-                        onClick={() => this.changeBookshelf(book, "wantToRead")}
+                        onClick={() => onChangeBookshelf(book, "wantToRead")}
                         type="button"
                         className="btn btn-warning btn-sm"
                         disabled={
@@ -174,7 +127,7 @@ class SearchBooks extends Component {
                         <i className="fas fa-book" title="Want to Read" />
                       </button>
                       <button
-                        onClick={() => this.changeBookshelf(book, "read")}
+                        onClick={() => onChangeBookshelf(book, "read")}
                         type="button"
                         className="btn btn-warning btn-sm"
                         disabled={book.shelf === "read" ? "disabled" : null}
@@ -182,7 +135,7 @@ class SearchBooks extends Component {
                         <i className="fas fa-archive" title="Read" />
                       </button>
                       <button
-                        onClick={() => this.changeBookshelf(book, "none")}
+                        onClick={() => onChangeBookshelf(book, "none")}
                         type="button"
                         className="btn btn-danger btn-sm"
                         disabled={
@@ -204,12 +157,14 @@ class SearchBooks extends Component {
     );
   };
 
+  // change time for debouncer
   search = _.debounce(query => {
     this.searchBooks(query);
   }, 300);
 
   render() {
-    const { term, searchResults, formattedResults } = this.state;
+    const { term } = this.state;
+    const { searchResults, formattedResults } = this.props;
 
     return (
       <div className="container">
