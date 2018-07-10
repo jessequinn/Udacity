@@ -1,6 +1,12 @@
 import _ from "lodash";
 import React from "react";
 import PropTypes from "prop-types";
+
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { Field, reduxForm } from "redux-form";
+
+// redux-form-material-ui
 import { withStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
@@ -9,8 +15,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import Typography from "@material-ui/core/Typography";
 
 import { createPost } from "../actions";
 
@@ -48,11 +53,28 @@ const styles = theme => ({
   },
   selectEmpty: {
     marginTop: theme.spacing.unit * 2
+  },
+  button: {
+    margin: theme.spacing.unit
   }
 });
 
+const validate = values => {
+  const errors = {};
+  const requiredFields = ["au", "ti", "bo", "cat"];
+
+  requiredFields.forEach(field => {
+    if (!values[field]) {
+      errors[field] = "Required";
+    }
+  });
+
+  return errors;
+};
+
 class PostModal extends React.Component {
   state = {
+
     cat: ""
   };
 
@@ -64,6 +86,18 @@ class PostModal extends React.Component {
     this.props.createPost(data);
   };
 
+  renderTextField = ({ input, label, meta: { touched, error }, ...custom }) => (
+    <TextField
+      id="required"
+      label={label}
+      className={this.props.classes.textField}
+      helperText={touched && error}
+      margin="normal"
+      {...input}
+      {...custom}
+    />
+  );
+
   render() {
     const { classes, modalClose, modalOpen, categories } = this.props;
 
@@ -74,51 +108,10 @@ class PostModal extends React.Component {
         open={modalOpen}
       >
         <div style={getModalStyle()} className={classes.paper}>
-          <form className={classes.container} noValidate autoComplete="off">
-            <TextField
-              id="author"
-              label="Author"
-              className={classes.textField}
-              margin="normal"
-            />
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="category">Category</InputLabel>
-              <Select
-                value={this.state.cat}
-                onChange={this.handleChange}
-                inputProps={{
-                  name: "cat",
-                  id: "category"
-                }}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {_.map(categories, category => {
-                  return (
-                    <MenuItem value={category.name} key={category.name}>
-                      {category.name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-            <TextField id="title" label="Title" fullWidth margin="normal" />
-            <TextField
-              id="body"
-              label="Content"
-              multiline
-              rowsMax="8"
-              fullWidth
-              margin="normal"
-            />
+          <form>
+            <Field name="ti" component={this.renderTextField} label="Title" />
+            <Field name="au" component={this.renderTextField} label="Author" />
           </form>
-          <Button onClick={this.postCreation} className={classes.button}>
-            Post
-          </Button>
-          <Button onClick={modalClose} className={classes.button}>
-            Close
-          </Button>
         </div>
       </Modal>
     );
@@ -139,5 +132,10 @@ export default withRouter(
   connect(
     mapStateToProps,
     { createPost }
-  )(withStyles(styles)(PostModal))
+  )(
+    reduxForm({
+      form: "PostModal", // a unique identifier for this form
+      validate
+    })(withStyles(styles)(PostModal))
+  )
 );

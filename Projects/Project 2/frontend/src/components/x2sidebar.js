@@ -8,7 +8,8 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import FormatListNumbered from "@material-ui/icons/FormatListNumbered";
+// import FormatListNumbered from "@material-ui/icons/FormatListNumbered";
+import Fingerprint from "@material-ui/icons/Fingerprint";
 
 const styles = theme => ({
   root: {
@@ -28,7 +29,7 @@ const Sidebar = props => {
           return (
             <ListItem button key={category.name}>
               <ListItemIcon>
-                <FormatListNumbered />
+                <Fingerprint />
               </ListItemIcon>
               <ListItemText primary={category.name} />
             </ListItem>

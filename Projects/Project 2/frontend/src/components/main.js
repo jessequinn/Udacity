@@ -15,8 +15,10 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import Grid from "@material-ui/core/Grid";
-import AddIcon from "@material-ui/icons/Add";
-import Tooltip from "@material-ui/core/Tooltip";
+// import AddIcon from "@material-ui/icons/Add";
+// import Tooltip from "@material-ui/core/Tooltip";
+import classNames from "classnames";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 
 // helper contains formatting tools
 import * as HELPER from "../utils/helper";
@@ -24,14 +26,14 @@ import PostModal from "./post_modal";
 
 const styles = theme => ({
   margin: {
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing.unit
   },
   padding: {
     padding: `0 ${theme.spacing.unit * 2}px`
   },
   card: {
     minWidth: 275,
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing.unit
   },
   title: {
     marginBottom: 16,
@@ -47,6 +49,16 @@ const styles = theme => ({
     position: "absolute",
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 3
+  },
+  details: {
+    alignItems: "center"
+  },
+  column: {
+    flexBasis: "33.33%"
+  },
+  helper: {
+    borderLeft: `2px solid ${theme.palette.divider}`,
+    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`
   }
 });
 
@@ -99,28 +111,53 @@ class Main extends Component {
     return (
       <Grid container spacing={24}>
         <Grid item xs={12}>
-          <FormGroup row>
-            <FormControlLabel
-              control={
-                <Switch
-                  onChange={e => this.checkOrderByVoteScore(e)}
-                  disabled={orderByTimeStamp === true ? true : null}
-                  color="primary"
+          <Card className={classes.card}>
+            <CardContent>
+              <FormGroup row>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      onChange={e => this.checkOrderByVoteScore(e)}
+                      disabled={orderByTimeStamp === true ? true : null}
+                      color="primary"
+                    />
+                  }
+                  label="Order by Vote Score (Ascending)"
                 />
-              }
-              label="Order by Vote Score (Ascending)"
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  onChange={e => this.checkOrderByTimeStamp(e)}
-                  disabled={orderByVoteScore === true ? true : null}
-                  color="primary"
+                <FormControlLabel
+                  control={
+                    <Switch
+                      onChange={e => this.checkOrderByTimeStamp(e)}
+                      disabled={orderByVoteScore === true ? true : null}
+                      color="primary"
+                    />
+                  }
+                  label="Order by Time (Descending)"
                 />
-              }
-              label="Order by Time (Descending)"
-            />
-          </FormGroup>
+              </FormGroup>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12}>
+          <Card className={classes.card}>
+            <CardContent>
+              <ExpansionPanelDetails className={classes.details}>
+                <div className={classes.column}>
+                  <Button size="small" onClick={this.handleOpen} className={classes.button}>
+                    Create Post
+                  </Button>
+                </div>
+                <div className={classes.column} />
+                <div className={classes.column} />
+                <div className={classes.column} />
+                <div className={classNames(classes.column, classes.helper)}>
+                  <Typography variant="caption">
+                    {`Numer of Posts: ${_.size(this.props.posts)}`}
+                  </Typography>
+                </div>
+              </ExpansionPanelDetails>
+            </CardContent>
+          </Card>
         </Grid>
         {_.map(sortedPosts, post => {
           return (
@@ -129,7 +166,7 @@ class Main extends Component {
                 <CardContent>
                   <Typography className={classes.title} color="textSecondary">
                     {HELPER.formatDate(post.timestamp)}
-                    <Button disabled className={classes.button}>
+                    <Button disabled>
                       <Fingerprint /> {post.category}
                     </Button>
                   </Typography>
@@ -165,17 +202,32 @@ class Main extends Component {
             </Grid>
           );
         })}
-        <Tooltip title="Add New Post">
-          <Button
-            variant="fab"
-            color="secondary"
-            className={classes.absolute}
-            onClick={this.handleOpen}
-          >
-            <AddIcon />
-          </Button>
-        </Tooltip>
-        <PostModal modalOpen={this.state.open} modalClose={this.handleClose}/>
+        <Grid item xs={12}>
+          <Card className={classes.card}>
+            <CardContent>
+              <ExpansionPanelDetails className={classes.details}>
+                <div className={classes.column}>
+                  <Button
+                    size="small"
+                    onClick={this.handleOpen}
+                    className={classes.button}
+                  >
+                    Create Post
+                  </Button>
+                </div>
+                <div className={classes.column} />
+                <div className={classes.column} />
+                <div className={classes.column} />
+                <div className={classNames(classes.column, classes.helper)}>
+                  <Typography variant="caption">
+                    {`Numer of Posts: ${_.size(this.props.posts)}`}
+                  </Typography>
+                </div>
+              </ExpansionPanelDetails>
+            </CardContent>
+          </Card>
+        </Grid>
+        <PostModal modalOpen={this.state.open} modalClose={this.handleClose} />
       </Grid>
     );
   }
