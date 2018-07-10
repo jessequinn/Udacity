@@ -12,12 +12,6 @@ import thunk from "redux-thunk";
 
 import "typeface-roboto";
 
-
-// import * as API from "./utils/api";
-//
-//
-// console.log(API.getCategories())
-
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)));

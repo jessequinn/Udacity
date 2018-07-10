@@ -13,11 +13,6 @@ import Sidebar from "./sidebar";
 const styles = theme => ({
   root: {
     flexGrow: 1
-  },
-  paper: {
-    padding: theme.spacing.unit * 2,
-    textAlign: "center",
-    color: theme.palette.text.secondary
   }
 });
 
@@ -33,16 +28,16 @@ class App extends Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={24}>
-          <Grid item xs={1}>
+          <Grid item xs={2}>
             {" "}
           </Grid>
           <Grid item xs={2}>
             <Sidebar />
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={6}>
             <Main />
           </Grid>
-          <Grid item xs={1}>
+          <Grid item xs={2}>
             {" "}
           </Grid>
         </Grid>
