@@ -1,32 +1,15 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
+import { reducer as form } from 'redux-form';
 
-import { FETCH_CATEGORIES, FETCH_POSTS, CREATE_POST } from "../actions";
-
-const categories = (state = [], action) => {
-  const { categories } = action;
-
-  switch (action.type) {
-    case FETCH_CATEGORIES:
-      return categories;
-    default:
-      return state;
-  }
-};
-
-const posts = (state = [], action) => {
-  const { posts, post } = action;
-
-  switch (action.type) {
-    case FETCH_POSTS:
-      return posts;
-    case CREATE_POST:
-      return [...state, post];
-    default:
-      return state;
-  }
-};
+import categories from './categories';
+import comments from './comments';
+import posts from './posts';
+import sortBy from './sort-by';
 
 export default combineReducers({
   categories,
-  posts
+  posts,
+  comments,
+  sortBy,
+  form
 });

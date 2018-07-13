@@ -7,9 +7,9 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Fingerprint from "@material-ui/icons/Fingerprint";
 
-const CategoryListItems = props => {
-  const { categories } = props;
 
+// function produces the side bar categories. Links disabled when location is the same.
+const SideBarCategories = ({ location, categories }) => {
   return (
     <div>
       {_.map(categories, category => {
@@ -19,6 +19,11 @@ const CategoryListItems = props => {
             to={`/categories/${category.name}`}
             button
             key={category.name}
+            disabled={
+              location.pathname === `/categories/${category.name}`
+                ? true
+                : false
+            }
           >
             <ListItemIcon>
               <Fingerprint />
@@ -35,4 +40,4 @@ const mapStateToProps = ({ categories }) => ({
   categories
 });
 
-export default withRouter(connect(mapStateToProps)(CategoryListItems));
+export default withRouter(connect(mapStateToProps)(SideBarCategories));

@@ -1,11 +1,9 @@
-// import _ from "lodash";
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
-import App from "./components/App";
+import App from "./components/app";
 import registerServiceWorker from "./registerServiceWorker";
 import { createStore, applyMiddleware, compose } from "redux";
-// import promise from "redux-promise";
 import reducers from "./reducers";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
