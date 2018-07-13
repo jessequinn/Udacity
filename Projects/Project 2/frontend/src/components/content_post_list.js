@@ -25,7 +25,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { formatDate } from "../utils/helper";
 
 // call actions
-import { upVotePost, downVotePost } from "../actions/index";
+import { upvotePost, downvotePost } from '../actions/posts';
 
 const styles = theme => ({
   margin: {
@@ -66,8 +66,7 @@ class ContentPostList extends Component {
 
   state = {
     orderByVoteScore: false,
-    orderByTimeStamp: false,
-    voted: false
+    orderByTimeStamp: false
   };
 
   checkOrderByVoteScore(e) {
@@ -189,7 +188,7 @@ class ContentPostList extends Component {
                         <ThumbUp className={classes.spacing} />
                       </IconButton>
                       <Typography color="textSecondary">
-                        Votes: {post.voteScore}
+                        {post.voteScore}
                       </Typography>
                       <IconButton
                         onClick={() => {
@@ -224,6 +223,6 @@ class ContentPostList extends Component {
 export default withRouter(
   connect(
     undefined,
-    { onUpVotePost: upVotePost, onDownVotePost: downVotePost }
+    { onUpVotePost: upvotePost, onDownVotePost: downvotePost }
   )(withStyles(styles)(ContentPostList))
 );

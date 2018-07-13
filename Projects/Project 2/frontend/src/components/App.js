@@ -47,10 +47,6 @@ class App extends React.Component {
     this.props.fetchPostsAndComments();
   }
 
-  selectiveCategory = (posts, category) => {
-    posts.filter(post => post.category === category);
-  };
-
   render() {
     const { classes } = this.props;
 
@@ -81,10 +77,6 @@ class App extends React.Component {
 App.propTypes = {
   classes: PropTypes.object.isRequired
 };
-
-const mapStateToProps = state => ({
-  posts: state.posts
-});
 
 export default withRouter(
   connect(
