@@ -5,21 +5,19 @@ import { connect } from "react-redux";
 // material-ui
 import Grid from "@material-ui/core/Grid";
 
-// import PostForm from './post-form';
 import ContentPostList from "./content_post_list";
 import ContentPostForm from "./content_post_form";
-
-// import PostDetail from './post-detail';
-// import { getSortedPostsWithSortedComments } from "../selectors/index";
+import ContentPostDetail from "./content_post_detail";
+import { getSortedPostsWithSortedComments } from "../selectors/index";
 
 class Content extends Component {
-  // filterPostByCategory(posts, category) {
-  //   return posts.filter(post => post.category === category);
-  // }
-  //
-  // filterPostById(posts, id) {
-  //   return posts.filter(post => post.id === id)[0];
-  // }
+  filterPostByCategory(posts, category) {
+    return posts.filter(post => post.category === category);
+  }
+
+  filterPostById(posts, id) {
+    return posts.filter(post => post.id === id)[0];
+  }
 
   render() {
     const { posts } = this.props;
@@ -33,6 +31,24 @@ class Content extends Component {
             render={() => <ContentPostList posts={posts} />}
           />
           <Route exact path="/posts/new" component={ContentPostForm} />
+          <Route
+            exact
+            path="/posts/:id"
+            render={({ match }) => (
+              <ContentPostDetail
+                {...this.filterPostById(posts, match.params.id)}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/posts/:id/edit"
+            render={({ match }) => (
+              <ContentPostForm
+                initialValues={this.filterPostById(posts, match.params.id)}
+              />
+            )}
+          />
         </Switch>
       </Grid>
     );
@@ -40,7 +56,7 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-  posts: state.posts
+  posts: getSortedPostsWithSortedComments(state)
 });
 
 export default withRouter(connect(mapStateToProps)(Content));

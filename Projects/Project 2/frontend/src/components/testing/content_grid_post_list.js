@@ -55,10 +55,6 @@ class ContentGridPostList extends Component {
     orderByTimeStamp: false
   };
 
-  handleChange = name => event => {
-    this.setState({ value: event.target.value });
-  };
-
   checkOrderByVoteScore(e) {
     let itemChecked = this.state.orderByVoteScore;
     itemChecked = e.target.checked;

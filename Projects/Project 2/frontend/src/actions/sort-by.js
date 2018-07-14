@@ -1,4 +1,4 @@
-import { SET_SORT_BY } from 'actions/constants';
+import { SET_SORT_BY } from './constants';
 
 export const setSortBy = (content, sortByType, order) => {
   return {

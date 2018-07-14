@@ -12,12 +12,12 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import Button from '@material-ui/core/Button';
+import Button from "@material-ui/core/Button";
 
 // redux-form-material-ui
 import { Select, TextField } from "redux-form-material-ui";
 
-import { createPost } from "../actions/posts";
+import { createPost, editPost } from "../actions/posts";
 
 const styles = theme => ({
   card: {
@@ -29,18 +29,6 @@ const styles = theme => ({
 class ContentPostForm extends React.Component {
   static propTypes = {
     classes: PropTypes.object.isRequired
-  };
-
-  state = {
-    cat: ""
-  };
-
-  handleChange = event => {
-    this.setState({ cat: event.target.value });
-  };
-
-  postCreation = data => {
-    this.props.createPost(data);
   };
 
   render() {
@@ -66,7 +54,7 @@ class ContentPostForm extends React.Component {
               <Card className={classes.card}>
                 <CardContent>
                   <Typography variant="subheading" gutterBottom align="center">
-                    Create a new Post.
+                    {!isEdit ? "Create a new Post." : "Edit Post"}
                   </Typography>
                 </CardContent>
               </Card>
@@ -112,7 +100,7 @@ class ContentPostForm extends React.Component {
                       </Grid>
                       <Grid item xs={3}>
                         <Field
-                          name="cat"
+                          name="category"
                           component={Select}
                           fullWidth
                           placeholder="Select a plan"
@@ -134,12 +122,14 @@ class ContentPostForm extends React.Component {
                           fullWidth
                         />
                       </Grid>
-                      <button type="button" onClick={() => history.goBack()}>
-                        Back
-                      </button>
-                      <button type="submit" disabled={pristine || submitting}>
-                        Submit
-                      </button>
+                      <Grid item xs={12}>
+                        <Button type="button" onClick={() => history.goBack()}>
+                          Back
+                        </Button>
+                        <Button type="submit" disabled={pristine || submitting}>
+                          Submit
+                        </Button>
+                      </Grid>
                     </Grid>
                   </form>
                 </CardContent>
@@ -162,7 +152,7 @@ export default reduxForm({
   withRouter(
     connect(
       mapStateToProps,
-      { createPost }
+      { createPost, editPost }
     )(withStyles(styles)(ContentPostForm))
   )
 );
