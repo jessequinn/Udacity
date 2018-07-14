@@ -140,6 +140,31 @@ class ContentPostDetail extends Component {
                 </CardActions>
               </Card>
             </Grid>
+          </Grid>{" "}
+          <Grid container spacing={24}>
+            <Grid item xs={12}>
+              <Card className={classes.card}>
+                <CardContent>
+                  <Grid container spacing={24}>
+                    <Grid item xs={10}>
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        component={Link}
+                        to="/posts/new"
+                      >
+                        New Comment
+                      </Button>
+                    </Grid>
+                    <Grid item xs={2} className={classes.leftBorderHighlight}>
+                      <Typography variant="caption">
+                        {`Numer of Comments: ${_.size(comments)}`}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
           </Grid>
           {_.map(comments, comment => {
             return (

@@ -25,7 +25,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { formatDate } from "../utils/helper";
 
 // call actions
-import { upvotePost, downvotePost } from '../actions/posts';
+import { upvotePost, downvotePost } from "../actions/posts";
 
 const styles = theme => ({
   margin: {
@@ -136,7 +136,7 @@ class ContentPostList extends Component {
                           color="primary"
                         />
                       }
-                      label="Order by Vote Score (Ascending)"
+                      label="Order by Vote Score (Lowest to Highest)"
                     />
                     <FormControlLabel
                       control={
@@ -146,7 +146,7 @@ class ContentPostList extends Component {
                           color="primary"
                         />
                       }
-                      label="Order by Time (Descending)"
+                      label="Order by Time (Newest to Oldest)"
                     />
                   </FormGroup>
                 </CardContent>
@@ -168,7 +168,11 @@ class ContentPostList extends Component {
                           <Fingerprint /> {post.category}
                         </Button>
                       </Typography>
-                      <Button component={Link} to={`/posts/${post.id}`} className={classes.link}>
+                      <Button
+                        component={Link}
+                        to={`/posts/${post.id}`}
+                        className={classes.link}
+                      >
                         <Typography variant="headline" component="h2">
                           {post.title}
                         </Typography>

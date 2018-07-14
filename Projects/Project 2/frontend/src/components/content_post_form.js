@@ -26,6 +26,16 @@ const styles = theme => ({
   }
 });
 
+// form validator constants (https://redux-form.com/6.6.2/examples/fieldlevelvalidation/)
+const required = value => (value ? undefined : "Required");
+const maxLength = max => value =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined;
+const minValue = min => value =>
+  value && value < min ? `Must be at least ${min}` : undefined;
+const maxLength15 = maxLength(15);
+const maxLength30 = maxLength(30);
+const minValue18 = minValue(18);
+
 class ContentPostForm extends React.Component {
   static propTypes = {
     classes: PropTypes.object.isRequired
@@ -37,6 +47,7 @@ class ContentPostForm extends React.Component {
       handleSubmit,
       pristine,
       submitting,
+      reset,
       categories,
       createPost,
       editPost,
@@ -84,8 +95,9 @@ class ContentPostForm extends React.Component {
                         <Field
                           name="title"
                           label="Title"
+                          validate={[required, maxLength30]}
                           component={TextField}
-                          placeholder="Give me a cool title!"
+                          placeholder="Give me a cool title no more than 30 characters!"
                           fullWidth
                         />
                       </Grid>
@@ -93,6 +105,7 @@ class ContentPostForm extends React.Component {
                         <Field
                           name="author"
                           label="Author"
+                          validate={[required, maxLength15]}
                           component={TextField}
                           placeholder="Cool Guy Name"
                           fullWidth
@@ -101,9 +114,11 @@ class ContentPostForm extends React.Component {
                       <Grid item xs={3}>
                         <Field
                           name="category"
+                          label="Category"
                           component={Select}
+                          validate={[required]}
                           fullWidth
-                          placeholder="Select a plan"
+                          placeholder="Select a category"
                         >
                           {categories.map((category, index) => (
                             <MenuItem key={index} value={category.name}>
@@ -116,18 +131,28 @@ class ContentPostForm extends React.Component {
                         <Field
                           name="body"
                           label="Body"
+                          validate={[required, minValue18]}
                           component={TextField}
-                          placeholder="Cool story brah!"
+                          placeholder="Cool story brah (minimum of 18 chacters bRAAh)!"
                           multiline
                           fullWidth
                         />
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid item xs={4}>
                         <Button type="button" onClick={() => history.goBack()}>
                           Back
                         </Button>
                         <Button type="submit" disabled={pristine || submitting}>
                           Submit
+                        </Button>
+                      </Grid>
+                      <Grid item xs={8} align="right">
+                        <Button
+                          type="button"
+                          disabled={pristine || submitting}
+                          onClick={reset}
+                        >
+                          Clear Values
                         </Button>
                       </Grid>
                     </Grid>
@@ -147,7 +172,7 @@ const mapStateToProps = ({ categories }) => ({
 });
 
 export default reduxForm({
-  form: "post"
+  form: "fieldLevelValidation" // a unique identifier for this form
 })(
   withRouter(
     connect(

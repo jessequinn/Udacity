@@ -49,6 +49,15 @@ class Content extends Component {
               />
             )}
           />
+          <Route
+            exact
+            path="/categories/:name"
+            render={({ match }) => (
+              <ContentPostList
+                posts={this.filterPostByCategory(posts, match.params.name)}
+              />
+            )}
+          />
         </Switch>
       </Grid>
     );
