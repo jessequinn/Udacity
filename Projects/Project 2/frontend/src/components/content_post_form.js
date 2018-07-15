@@ -85,10 +85,11 @@ class ContentPostForm extends React.Component {
                       data = { title, body, category, author };
                       if (isEdit) {
                         editPost(match.params.id, data);
+                        history.goBack();
                       } else {
                         createPost(data);
+                        history.push('/');
                       }
-                      history.goBack();
                     })}
                   >
                     <Grid container spacing={24}>
@@ -173,7 +174,7 @@ const mapStateToProps = ({ categories }) => ({
 });
 
 export default reduxForm({
-  form: "fieldLevelValidation" // a unique identifier for this form
+  form: "PostValidation" // a unique identifier for this form
 })(
   withRouter(
     connect(

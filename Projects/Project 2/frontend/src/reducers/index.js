@@ -4,7 +4,7 @@ import { reducer as form } from 'redux-form';
 import categories from './categories';
 import comments from './comments';
 import posts from './posts';
-import sortBy from './sort-by';
+import sortBy from './sort_by';
 
 export default combineReducers({
   categories,
