@@ -2,11 +2,9 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
-Several key node modules were installed. Namely, [material-ui](https://material-ui.com), for interface, [mdi-material-ui](https://github.com/TeamWertarbyte/mdi-material-ui), for icons, [redux-form] (redux form initial values), for easy form state, and (redux-form-material-ui)[https://github.com/erikras/redux-form-material-ui/tree/5.0], for a bridge between redux-form and material-ui.
+Several key node modules were installed. Namely, [material-ui](https://material-ui.com), for interface, [mdi-material-ui](https://github.com/TeamWertarbyte/mdi-material-ui), for icons, [redux-form] (redux form initial values), for easy form state, and [redux-form-material-ui](https://github.com/erikras/redux-form-material-ui/tree/5.0), for a bridge between redux-form and material-ui.
 
-## Sending Feedback
-
-I am always open to [your feedback](http://jessequinn.info).
+## Installation and Running
 
 ## Folder Structure
 
@@ -61,3 +59,7 @@ frontend/
   package.json
 README.md
 ```
+
+## Sending Feedback
+
+I am always open to [your feedback](http://jessequinn.info).
