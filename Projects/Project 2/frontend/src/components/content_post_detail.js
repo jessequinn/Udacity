@@ -12,12 +12,12 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Fingerprint from "@material-ui/icons/Fingerprint";
-import InsertComment from "@material-ui/icons/InsertComment";
-import ModeComment from "@material-ui/icons/ModeComment";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 
+// https://github.com/TeamWertarbyte/mdi-material-ui
+// https://materialdesignicons.com
 import {
   CommentPlusOutline,
   CommentRemove,
@@ -169,7 +169,7 @@ class ContentPostDetail extends Component {
                     to={"/"}
                     className={classes.button}
                   >
-                    <Delete className={classes.spacing} />
+                    <CommentRemove className={classes.spacing} />
                   </IconButton>
                   <Badge
                     color="primary"

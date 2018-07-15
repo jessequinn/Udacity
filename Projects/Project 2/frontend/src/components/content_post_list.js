@@ -155,7 +155,21 @@ class ContentPostList extends Component {
               </Grid>
             </Grid>
           ) : (
-            "test"
+            <Grid container spacing={24}>
+              <Grid item xs={12}>
+                <Card className={classes.card}>
+                  <CardContent>
+                    <Grid container spacing={24}>
+                      <Grid item xs={12}>
+                        <Typography variant="subheading" gutterBottom align="center">
+                          No Posts available.
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
           )}
           {_.map(sortedPosts, post => {
             return (
