@@ -17,15 +17,24 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import Grid from "@material-ui/core/Grid";
-import ThumbUp from "@material-ui/icons/ThumbUp";
-import ThumbDown from "@material-ui/icons/ThumbDown";
 import IconButton from "@material-ui/core/IconButton";
 
 // helper contains formatting tools
 import { formatDate } from "../utils/helper";
 
 // call actions
-import { upvotePost, downvotePost } from "../actions/posts";
+import { upvotePost, downvotePost, deletePost } from "../actions/posts";
+
+// https://github.com/TeamWertarbyte/mdi-material-ui
+// https://materialdesignicons.com
+import {
+  CommentRemove,
+  ThumbDown,
+  ThumbUp,
+  TooltipEdit
+} from "mdi-material-ui";
+
+// import NoMatch from "./no_match";
 
 const styles = theme => ({
   margin: {
@@ -82,7 +91,13 @@ class ContentPostList extends Component {
   }
 
   render() {
-    const { classes, posts, onUpVotePost, onDownVotePost } = this.props;
+    const {
+      classes,
+      posts,
+      onUpVotePost,
+      onDownVotePost,
+      onDeletePost
+    } = this.props;
 
     const { orderByVoteScore, orderByTimeStamp } = this.state;
 
@@ -193,7 +208,7 @@ class ContentPostList extends Component {
                       </Typography>
                       <Button
                         component={Link}
-                        to={`/posts/${post.id}`}
+                        to={`/${post.category}/${post.id}`}
                         className={classes.link}
                       >
                         <Typography variant="headline" component="h2">
@@ -224,6 +239,23 @@ class ContentPostList extends Component {
                       >
                         <ThumbDown className={classes.spacing} />
                       </IconButton>
+                      <IconButton
+                        component={Link}
+                        to={`/${post.category}/${post.id}/edit`}
+                        className={classes.button}
+                      >
+                        <TooltipEdit className={classes.spacing} />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
+                          onDeletePost(post.id);
+                        }}
+                        component={Link}
+                        to={"/"}
+                        className={classes.button}
+                      >
+                        <CommentRemove className={classes.spacing} />
+                      </IconButton>
                       <Badge
                         color="primary"
                         badgeContent={post.commentCount}
@@ -248,6 +280,10 @@ class ContentPostList extends Component {
 export default withRouter(
   connect(
     undefined,
-    { onUpVotePost: upvotePost, onDownVotePost: downvotePost }
+    {
+      onUpVotePost: upvotePost,
+      onDownVotePost: downvotePost,
+      onDeletePost: deletePost
+    }
   )(withStyles(styles)(ContentPostList))
 );

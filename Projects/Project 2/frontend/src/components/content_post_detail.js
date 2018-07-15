@@ -148,7 +148,7 @@ class ContentPostDetail extends Component {
                   </IconButton>
                   <IconButton
                     component={Link}
-                    to={`/posts/${id}/edit`}
+                    to={`/${category}/${id}/edit`}
                     className={classes.button}
                   >
                     <TooltipEdit className={classes.spacing} />

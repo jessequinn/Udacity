@@ -88,7 +88,7 @@ class ContentPostForm extends React.Component {
                         history.goBack();
                       } else {
                         createPost(data);
-                        history.push('/');
+                        history.push("/");
                       }
                     })}
                   >
@@ -114,6 +114,10 @@ class ContentPostForm extends React.Component {
                         />
                       </Grid>
                       <Grid item xs={3}>
+                        <Typography variant="subheading" gutterBottom align="center">
+                          Category
+                        </Typography>
+                        {/* Select Field not working correctly. I have submitted a bug report to respective creator */}
                         <Field
                           name="category"
                           label="Category"

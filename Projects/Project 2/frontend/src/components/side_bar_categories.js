@@ -7,7 +7,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Fingerprint from "@material-ui/icons/Fingerprint";
 
-
 // function produces the side bar categories. Links disabled when location is the same.
 const SideBarCategories = ({ location, categories }) => {
   return (
@@ -16,11 +15,11 @@ const SideBarCategories = ({ location, categories }) => {
         return (
           <ListItem
             component={Link}
-            to={`/categories/${category.name}`}
+            to={`/${category.name}`}
             button
             key={category.name}
             disabled={
-              location.pathname === `/categories/${category.name}`
+              location.pathname === `/${category.name}`
                 ? true
                 : false
             }
