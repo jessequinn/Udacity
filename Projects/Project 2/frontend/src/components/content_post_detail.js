@@ -12,10 +12,20 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Fingerprint from "@material-ui/icons/Fingerprint";
+import InsertComment from "@material-ui/icons/InsertComment";
+import ModeComment from "@material-ui/icons/ModeComment";
 import Grid from "@material-ui/core/Grid";
-import ThumbUp from "@material-ui/icons/ThumbUp";
-import ThumbDown from "@material-ui/icons/ThumbDown";
 import IconButton from "@material-ui/core/IconButton";
+import Badge from "@material-ui/core/Badge";
+
+import {
+  CommentPlusOutline,
+  CommentRemove,
+  Delete,
+  ThumbDown,
+  ThumbUp,
+  TooltipEdit
+} from "mdi-material-ui";
 
 // helper contains formatting tools
 import { formatDate } from "../utils/helper";
@@ -23,6 +33,8 @@ import { formatDate } from "../utils/helper";
 // call actions
 import { upvotePost, downvotePost } from "../actions/posts";
 import { upvoteComment, downvoteComment } from "../actions/comments";
+import { deletePost } from "../actions/posts";
+import { deleteComment } from "../actions/comments";
 
 const styles = theme => ({
   margin: {
@@ -43,8 +55,8 @@ const styles = theme => ({
     marginBottom: 12
   },
   spacing: {
-    width: 15,
-    height: 15
+    width: 18,
+    height: 18
   },
   leftBorderHighlight: {
     borderLeft: `2px solid ${theme.palette.divider}`,
@@ -53,6 +65,9 @@ const styles = theme => ({
   link: {
     paddingLeft: 0,
     marginLeft: 0
+  },
+  button: {
+    margin: theme.spacing.unit
   }
 });
 
@@ -69,11 +84,14 @@ class ContentPostDetail extends Component {
       author,
       timestamp,
       voteScore,
+      commentCount,
       category,
       onUpVotePost,
       onDownVotePost,
       onUpvoteComment,
       onDownvoteComment,
+      onDeleteComment,
+      onDeletePost,
       classes,
       comments = []
     } = this.props;
@@ -137,10 +155,35 @@ class ContentPostDetail extends Component {
                   >
                     <ThumbDown className={classes.spacing} />
                   </IconButton>
+                  <IconButton className={classes.button}>
+                    <TooltipEdit className={classes.spacing} />
+                  </IconButton>
+                  <IconButton className={classes.button}>
+                    <CommentPlusOutline className={classes.spacing} />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      onDeletePost(id);
+                    }}
+                    component={Link}
+                    to={"/"}
+                    className={classes.button}
+                  >
+                    <Delete className={classes.spacing} />
+                  </IconButton>
+                  <Badge
+                    color="primary"
+                    badgeContent={commentCount ? commentCount : "0"}
+                    className={classes.margin}
+                  >
+                    <Typography className={classes.padding}>
+                      Comments
+                    </Typography>
+                  </Badge>
                 </CardActions>
               </Card>
             </Grid>
-          </Grid>{" "}
+          </Grid>
           <Grid container spacing={24}>
             <Grid item xs={12}>
               <Card className={classes.card}>
@@ -203,6 +246,17 @@ class ContentPostDetail extends Component {
                       >
                         <ThumbDown className={classes.spacing} />
                       </IconButton>
+                      <IconButton className={classes.button}>
+                        <TooltipEdit className={classes.spacing} />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => {
+                          onDeleteComment(comment.id);
+                        }}
+                        className={classes.button}
+                      >
+                        <CommentRemove className={classes.spacing} />
+                      </IconButton>
                     </CardActions>
                   </Card>
                 </Grid>
@@ -222,7 +276,9 @@ export default withRouter(
       onUpVotePost: upvotePost,
       onDownVotePost: downvotePost,
       onUpvoteComment: upvoteComment,
-      onDownvoteComment: downvoteComment
+      onDownvoteComment: downvoteComment,
+      onDeleteComment: deleteComment,
+      onDeletePost: deletePost
     }
   )(withStyles(styles)(ContentPostDetail))
 );

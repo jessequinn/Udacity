@@ -123,36 +123,40 @@ class ContentPostList extends Component {
               </Card>
             </Grid>
           </Grid>
-          <Grid container spacing={24}>
-            <Grid item xs={12}>
-              <Card className={classes.card}>
-                <CardContent>
-                  <FormGroup row>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          onChange={e => this.checkOrderByVoteScore(e)}
-                          disabled={orderByTimeStamp === true ? true : null}
-                          color="primary"
-                        />
-                      }
-                      label="Order by Vote Score (Lowest to Highest)"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          onChange={e => this.checkOrderByTimeStamp(e)}
-                          disabled={orderByVoteScore === true ? true : null}
-                          color="primary"
-                        />
-                      }
-                      label="Order by Time (Newest to Oldest)"
-                    />
-                  </FormGroup>
-                </CardContent>
-              </Card>
+          {_.size(posts) !== 0 ? (
+            <Grid container spacing={24}>
+              <Grid item xs={12}>
+                <Card className={classes.card}>
+                  <CardContent>
+                    <FormGroup row>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            onChange={e => this.checkOrderByVoteScore(e)}
+                            disabled={orderByTimeStamp === true ? true : null}
+                            color="primary"
+                          />
+                        }
+                        label="Order by Vote Score (Lowest to Highest)"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            onChange={e => this.checkOrderByTimeStamp(e)}
+                            disabled={orderByVoteScore === true ? true : null}
+                            color="primary"
+                          />
+                        }
+                        label="Order by Time (Newest to Oldest)"
+                      />
+                    </FormGroup>
+                  </CardContent>
+                </Card>
+              </Grid>
             </Grid>
-          </Grid>
+          ) : (
+            "test"
+          )}
           {_.map(sortedPosts, post => {
             return (
               <Grid container spacing={24} key={post.id}>

@@ -27,6 +27,7 @@ const styles = theme => ({
 });
 
 // form validator constants (https://redux-form.com/6.6.2/examples/fieldlevelvalidation/)
+// not sure if they are truly working!
 const required = value => (value ? undefined : "Required");
 const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined;
@@ -115,8 +116,8 @@ class ContentPostForm extends React.Component {
                         <Field
                           name="category"
                           label="Category"
-                          component={Select}
                           validate={[required]}
+                          component={Select}
                           fullWidth
                           placeholder="Select a category"
                         >
