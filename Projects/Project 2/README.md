@@ -6,7 +6,7 @@ Several key node modules were installed. Namely, [material-ui](https://material-
 
 The general concept of the App is shown in the following figure.
 
-![App Structure](./Default View with Comments.png)
+![alt text](./concept.png)
 
 ## Installation and Running
 Within the `frontend` directory run the following commands:
