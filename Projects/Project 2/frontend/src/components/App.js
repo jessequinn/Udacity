@@ -3,16 +3,22 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import classNames from "classnames";
+
+// material-ui
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 
+// Site framework
 import Content from "./content";
-import { getAllCategories } from "../actions/categories";
-import { getAllPostsAndComments } from "../actions/posts";
 import SideBar from "./side_bar";
 
+// call actions
+import { getAllCategories } from "../actions/categories";
+import { getAllPostsAndComments } from "../actions/posts";
+
+// set width of material-ui drawer (sidebar navigation)
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -42,6 +48,10 @@ const styles = theme => ({
 });
 
 class App extends React.Component {
+  static propTypes = {
+    classes: PropTypes.object.isRequired
+  };
+
   componentDidMount() {
     this.props.fetchCategories();
     this.props.fetchPostsAndComments();
@@ -73,10 +83,6 @@ class App extends React.Component {
     );
   }
 }
-
-App.propTypes = {
-  classes: PropTypes.object.isRequired
-};
 
 export default withRouter(
   connect(

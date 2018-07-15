@@ -1,14 +1,16 @@
-import Api from '../api/index';
-import { GET_ALL_CATEGORIES_SUCCESS } from './constants';
+import API from "../api";
 
-export const getAllCategories = () => (dispatch) => {
-  Api.getCategories()
-    .then(categories => dispatch(getAllCategoriesSuccess(categories)));
-}
+import { GET_ALL_CATEGORIES } from "./constants";
 
-const getAllCategoriesSuccess = (categories) => {
+export const getAllCategories = () => dispatch => {
+  API.getCategories().then(categories =>
+    dispatch(getAllCategoriesSuccess(categories))
+  );
+};
+
+const getAllCategoriesSuccess = categories => {
   return {
-    type: GET_ALL_CATEGORIES_SUCCESS,
+    type: GET_ALL_CATEGORIES,
     categories
-  }
-}
+  };
+};

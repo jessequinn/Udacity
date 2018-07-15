@@ -1,24 +1,24 @@
 import {
-  GET_ALL_COMMENTS_SUCCESS,
-  CREATE_COMMENT_SUCCESS,
-  EDIT_COMMENT_SUCCESS,
-  DELETE_COMMENT_SUCCESS,
-  UPVOTE_COMMENT_SUCCESS,
-  DOWNVOTE_COMMENT_SUCCESS
+  GET_ALL_COMMENTS,
+  CREATE_COMMENT,
+  EDIT_COMMENT,
+  DELETE_COMMENT,
+  UPVOTE_COMMENT,
+  DOWNVOTE_COMMENT
 } from "../actions/constants";
 
 const comments = (state = [], action) => {
   switch (action.type) {
-    case GET_ALL_COMMENTS_SUCCESS:
+    case GET_ALL_COMMENTS:
       return [...state, ...action.comments];
-    case CREATE_COMMENT_SUCCESS:
+    case CREATE_COMMENT:
       return [...state, action.comment];
-    case EDIT_COMMENT_SUCCESS:
+    case EDIT_COMMENT:
       return state.map(c => comment(c, action));
-    case DELETE_COMMENT_SUCCESS:
+    case DELETE_COMMENT:
       return [...state.filter(comment => comment.id !== action.id)];
-    case UPVOTE_COMMENT_SUCCESS:
-    case DOWNVOTE_COMMENT_SUCCESS:
+    case UPVOTE_COMMENT:
+    case DOWNVOTE_COMMENT:
       return state.map(c => comment(c, action));
     default:
       return state;
@@ -27,14 +27,14 @@ const comments = (state = [], action) => {
 
 const comment = (state = {}, action) => {
   switch (action.type) {
-    case EDIT_COMMENT_SUCCESS:
+    case EDIT_COMMENT:
       if (state.id !== action.comment.id) {
         return state;
       }
       return {
         ...action.comment
       };
-    case UPVOTE_COMMENT_SUCCESS:
+    case UPVOTE_COMMENT:
       if (state.id !== action.id) {
         return state;
       }
@@ -42,7 +42,7 @@ const comment = (state = {}, action) => {
         ...state,
         voteScore: state.voteScore + 1
       };
-    case DOWNVOTE_COMMENT_SUCCESS:
+    case DOWNVOTE_COMMENT:
       if (state.id !== action.id) {
         return state;
       }

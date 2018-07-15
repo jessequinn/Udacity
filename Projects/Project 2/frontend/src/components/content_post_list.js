@@ -46,8 +46,8 @@ const styles = theme => ({
     marginBottom: 12
   },
   spacing: {
-    width: 15,
-    height: 15
+    width: 18,
+    height: 18
   },
   leftBorderHighlight: {
     borderLeft: `2px solid ${theme.palette.divider}`,
@@ -123,7 +123,7 @@ class ContentPostList extends Component {
               </Card>
             </Grid>
           </Grid>
-          {_.size(posts) !== 0 ? (
+          {_.size(posts) > 1 ? (
             <Grid container spacing={24}>
               <Grid item xs={12}>
                 <Card className={classes.card}>
@@ -154,14 +154,19 @@ class ContentPostList extends Component {
                 </Card>
               </Grid>
             </Grid>
-          ) : (
+          ) : null}
+          {_.size(posts) !== 0 ? null : (
             <Grid container spacing={24}>
               <Grid item xs={12}>
                 <Card className={classes.card}>
                   <CardContent>
                     <Grid container spacing={24}>
                       <Grid item xs={12}>
-                        <Typography variant="subheading" gutterBottom align="center">
+                        <Typography
+                          variant="subheading"
+                          gutterBottom
+                          align="center"
+                        >
                           No Posts available.
                         </Typography>
                       </Grid>
@@ -205,7 +210,6 @@ class ContentPostList extends Component {
                           onUpVotePost(post.id);
                         }}
                         className={classes.button}
-                        aria-label="Delete"
                       >
                         <ThumbUp className={classes.spacing} />
                       </IconButton>
@@ -217,7 +221,6 @@ class ContentPostList extends Component {
                           onDownVotePost(post.id);
                         }}
                         className={classes.button}
-                        aria-label="Delete"
                       >
                         <ThumbDown className={classes.spacing} />
                       </IconButton>

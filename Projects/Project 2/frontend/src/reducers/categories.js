@@ -1,8 +1,8 @@
-import { GET_ALL_CATEGORIES_SUCCESS } from "../actions/constants";
+import { GET_ALL_CATEGORIES } from "../actions/constants";
 
 const categories = (state = [], action) => {
   switch (action.type) {
-    case GET_ALL_CATEGORIES_SUCCESS:
+    case GET_ALL_CATEGORIES:
       return action.categories;
     default:
       return state;

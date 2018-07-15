@@ -1,6 +1,22 @@
-import { getCategories } from './categories';
-import { getPosts, createPost, editPost, deletePost, upvotePost, downvotePost } from './posts';
-import { getComments, createComment, editComment, deleteComment, upvoteComment, downvoteComment } from './comments';
+import { getCategories } from "./categories";
+
+import {
+  getPosts,
+  createPost,
+  editPost,
+  deletePost,
+  upvotePost,
+  downvotePost
+} from "./posts";
+
+import {
+  getComments,
+  createComment,
+  editComment,
+  deleteComment,
+  upvoteComment,
+  downvoteComment
+} from "./comments";
 
 export default {
   getCategories,
@@ -16,4 +32,4 @@ export default {
   deleteComment,
   upvoteComment,
   downvoteComment
-}
+};
