@@ -66,6 +66,8 @@ frontend/
     logo.svg
     registerServiceWorker.js
   package.json
+concept.png
+readable_project.bmpr
 README.md
 ```
 
