@@ -5,7 +5,9 @@
   "dependencies": {
     "@material-ui/core": "^1.4.0",
     "@material-ui/icons": "^1.1.0",
+    "ajv": "^6.5.2",
     "axios": "^0.18.0",
+    "material-ui": "^0.20.1",
     "mdi-material-ui": "^5.2.0",
     "moment": "^2.22.2",
     "qs": "^6.5.2",
@@ -16,6 +18,8 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "redux": "^4.0.0",
+    "redux-form": "^7.4.2",
+    "redux-form-material-ui": "^4.3.4",
     "redux-thunk": "^2.3.0",
     "uuid": "^3.3.2"
   },
