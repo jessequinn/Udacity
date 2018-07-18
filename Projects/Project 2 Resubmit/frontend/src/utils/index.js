@@ -1,4 +1,4 @@
-// needed for timestamp formatting (https://github.com/moment/moment)
+// needed for timestamp formatting (https://github.com/moment/moment) and react-moment (https://www.npmjs.com/package/react-moment)
 // refer to https://devhints.io/moment
 import moment from "moment";
 

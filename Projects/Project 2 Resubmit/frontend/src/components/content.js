@@ -29,8 +29,11 @@ import {
 import styles from "../styles";
 import { formatDate } from "../utils";
 
+// call actions
+import { postUpVotePost, postDownVotePost } from "../actions";
+
 const Content = props => {
-  const { classes, posts } = props;
+  const { classes, posts, onPostUpVotePost, onPostDownVotePost } = props;
   // console.log(posts);
 
   return (
@@ -64,6 +67,9 @@ const Content = props => {
                   <CardActions>
                     <IconButton
                       className={classes.button}
+                      onClick={() => {
+                        onPostUpVotePost(post.id);
+                      }}
                     >
                       <ThumbUp className={classes.spacing} />
                     </IconButton>
@@ -72,6 +78,9 @@ const Content = props => {
                     </Typography>
                     <IconButton
                       className={classes.button}
+                      onClick={() => {
+                        onPostDownVotePost(post.id);
+                      }}
                     >
                       <ThumbDown className={classes.spacing} />
                     </IconButton>
@@ -83,7 +92,7 @@ const Content = props => {
                       <TooltipEdit className={classes.spacing} />
                     </IconButton>
                     <IconButton
-                        component={Link}
+                      component={Link}
                       to={"/"}
                       className={classes.button}
                     >
@@ -118,5 +127,11 @@ const mapStateToProps = state => ({
 });
 
 export default withRouter(
-  connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Content))
+  connect(
+    mapStateToProps,
+    {
+      onPostUpVotePost: postUpVotePost,
+      onPostDownVotePost: postDownVotePost
+    }
+  )(withStyles(styles, { withTheme: true })(Content))
 );

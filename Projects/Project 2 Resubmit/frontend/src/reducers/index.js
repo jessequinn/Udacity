@@ -5,7 +5,9 @@ import { combineReducers } from "redux";
 import {
   GET_CATEGORIES_SUCCESS,
   GET_POSTS_SUCCESS,
-  GET_COMMENTS_SUCCESS
+  GET_COMMENTS_SUCCESS,
+  POST_UPVOTE_SUCCESS,
+  POST_DOWNVOTE_SUCCESS
 } from "../actions";
 
 const categories = (state = [], action) => {
@@ -21,6 +23,26 @@ const posts = (state = [], action) => {
   switch (action.type) {
     case GET_POSTS_SUCCESS:
       return action.posts;
+    case POST_UPVOTE_SUCCESS:
+      return state.map(post => {
+        if (post.id !== action.id) {
+          return post;
+        }
+        return {
+          ...post,
+          voteScore: post.voteScore + 1
+        };
+      });
+    case POST_DOWNVOTE_SUCCESS:
+      return state.map(post => {
+        if (post.id !== action.id) {
+          return post;
+        }
+        return {
+          ...post,
+          voteScore: post.voteScore - 1
+        };
+      });
     default:
       return state;
   }
