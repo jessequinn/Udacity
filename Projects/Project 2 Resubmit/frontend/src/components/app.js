@@ -1,6 +1,9 @@
 // Site structure based on example found here (https://material-ui.com/demos/drawers/)
+
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 // material-ui (https://material-ui.com/)
 import classNames from "classnames";
@@ -16,6 +19,11 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
 // components
 import SideBar from "./side_bar.js";
+import Content from "./content.js";
+
+
+// call actions
+import { getCategories, getPostsWithComments } from "../actions";
 
 const drawerWidth = 240;
 
@@ -97,6 +105,11 @@ class App extends Component {
     this.setState({ open: false });
   };
 
+  componentDidMount() {
+    this.props.getCategories();
+    this.props.getPostsWithComments();
+  }
+
   render() {
     const { classes, theme } = this.props;
 
@@ -149,9 +162,7 @@ class App extends Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Typography noWrap>
-            {"You think water moves fast? You should see ice."}
-          </Typography>
+          <Content />
         </main>
       </div>
     );
@@ -163,4 +174,12 @@ App.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(App);
+export default withRouter(
+  connect(
+    undefined,
+    {
+      getCategories,
+      getPostsWithComments
+    }
+  )(withStyles(styles, { withTheme: true })(App))
+);
