@@ -1,5 +1,4 @@
 // Site structure based on example found here (https://material-ui.com/demos/drawers/)
-
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -21,7 +20,6 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import SideBar from "./side_bar.js";
 import Content from "./content.js";
 
-
 // call actions
 import { getCategories, getPostsWithComments } from "../actions";
 
@@ -30,7 +28,7 @@ const drawerWidth = 240;
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    height: 430,
+    height: "auto",
     zIndex: 1,
     overflow: "hidden",
     position: "relative",

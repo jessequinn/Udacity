@@ -1,3 +1,4 @@
+// split reducer example followed from example presented at https://redux.js.org/basics/reducers
 import { combineReducers } from "redux";
 
 // actions and reducers design are based on https://scotch.io/tutorials/bookshop-with-react-redux-ii-async-requests-with-thunks
