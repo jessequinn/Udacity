@@ -7,7 +7,8 @@ import {
   GET_POSTS_SUCCESS,
   GET_COMMENTS_SUCCESS,
   POST_UPVOTE_SUCCESS,
-  POST_DOWNVOTE_SUCCESS
+  POST_DOWNVOTE_SUCCESS,
+  CREATE_POST_SUCCESS
 } from "../actions";
 
 const categories = (state = [], action) => {
@@ -43,6 +44,8 @@ const posts = (state = [], action) => {
           voteScore: post.voteScore - 1
         };
       });
+    case CREATE_POST_SUCCESS:
+      return [...state, action.post];
     default:
       return state;
   }
