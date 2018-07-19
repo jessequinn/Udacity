@@ -1,5 +1,6 @@
 import _ from "lodash";
 import React, { Component } from "react";
+// https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/withRouter.md
 import { withRouter, Switch, Route } from "react-router-dom";
 import { connect } from "react-redux";
 

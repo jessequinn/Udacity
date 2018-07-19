@@ -1,6 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 import { Field, reduxForm } from "redux-form";
 
@@ -11,25 +12,93 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-
-// material-ui
-import MenuItem from "@material-ui/core/MenuItem";
-
-// redux-form-material-ui
-import { Select, TextField } from "redux-form-material-ui";
-
+import TextField from "@material-ui/core/TextField";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 import styles from "../styles";
 
-// form validator constants (https://redux-form.com/6.6.2/examples/fieldlevelvalidation/)
-// not sure if they are truly working!
-const required = value => (value ? undefined : "Required");
-const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined;
-const minValue = min => value =>
-  value && value < min ? `Must be at least ${min}` : undefined;
-const maxLength15 = maxLength(15);
-const maxLength30 = maxLength(30);
-const minValue18 = minValue(18);
+import { postCreatePost } from "../actions";
+
+// used the following example https://medium.com/@benawad/redux-form-and-material-ui-example-f5073086cf9d for form shape
+// https://material-ui.com/demos/text-fields/ for textfield examples
+// https://material-ui.com/demos/selects/ for select example
+// https://github.com/erikras/redux-form-material-ui/issues/208 example use of Boolean operation
+const validate = values => {
+  const errors = {};
+  const requiredFields = ["title", "author", "body", "category"];
+
+  requiredFields.forEach(field => {
+    if (!values[field]) {
+      errors[field] = "Required";
+    }
+  });
+
+  return errors;
+};
+
+const renderTextField = ({
+  input,
+  label,
+  meta: { touched, error },
+  ...custom
+}) => (
+  <TextField
+    error={Boolean(touched && error)}
+    label={label}
+    id="margin-none"
+    helperText={touched && error ? "Required" : null}
+    fullWidth
+    {...input}
+    {...custom}
+  />
+);
+
+const renderTextFieldMultiline = ({
+  input,
+  label,
+  meta: { touched, error },
+  ...custom
+}) => (
+  <TextField
+    error={Boolean(touched && error)}
+    helperText={touched && error ? "Required" : null}
+    label={label}
+    id="margin-none"
+    fullWidth
+    multiline
+    {...input}
+    {...custom}
+  />
+);
+
+const renderSelectField = ({
+  categories,
+  input,
+  label,
+  meta: { touched, error },
+  children,
+  ...custom
+}) => (
+  <FormControl>
+    <InputLabel
+      htmlFor={`${label}-native-simple`}
+      error={Boolean(touched && error)}
+    >
+      {label}
+    </InputLabel>
+    <Select native children={children} {...input} {...custom}>
+      <option value="" />
+      {categories.map(category => (
+        <option key={category.name} value={category.name}>
+          {category.name}
+        </option>
+      ))}
+    </Select>
+  </FormControl>
+);
+
+// https://stackoverflow.com/questions/37539601/redux-form-handlesubmit-how-to-access-store-state
 
 const ContentPostForm = ({
   classes,
@@ -38,7 +107,8 @@ const ContentPostForm = ({
   submitting,
   reset,
   history,
-  match
+  handleSubmit,
+  postCreatePost
 }) => {
   return (
     <Grid container spacing={24}>
@@ -48,7 +118,7 @@ const ContentPostForm = ({
             <Card className={classes.card}>
               <CardContent>
                 <Typography variant="subheading" gutterBottom align="center">
-                  "Create a new Post."
+                  Create a new Post.
                 </Typography>
               </CardContent>
             </Card>
@@ -56,61 +126,47 @@ const ContentPostForm = ({
           <Grid item xs={12}>
             <Card className={classes.card}>
               <CardContent>
-                <form>
+                <form
+                  onSubmit={handleSubmit(pdata => {
+                    const {
+                      title,
+                      author,
+                      category = categories[0].name,
+                      body
+                    } = pdata;
+                    pdata = { title, body, author, category };
+                    postCreatePost(pdata);
+                    history.push("/");
+                  })}
+                >
                   <Grid container spacing={24}>
                     <Grid item xs={6}>
                       <Field
                         name="title"
+                        component={renderTextField}
                         label="Title"
-                        validate={[required, maxLength30]}
-                        component={TextField}
-                        placeholder="Give me a cool title no more than 30 characters!"
-                        fullWidth
                       />
                     </Grid>
                     <Grid item xs={3}>
                       <Field
                         name="author"
+                        component={renderTextField}
                         label="Author"
-                        validate={[required, maxLength15]}
-                        component={TextField}
-                        placeholder="Cool Guy Name"
-                        fullWidth
                       />
                     </Grid>
                     <Grid item xs={3}>
-                      <Typography
-                        variant="subheading"
-                        gutterBottom
-                        align="center"
-                      >
-                        Category
-                      </Typography>
-                      {/* Select Field not working correctly. I have submitted a bug report to respective creator */}
                       <Field
                         name="category"
+                        component={renderSelectField}
                         label="Category"
-                        validate={[required]}
-                        component={Select}
-                        fullWidth
-                        placeholder="Select a category"
-                      >
-                        {categories.map((category, index) => (
-                          <MenuItem key={index} value={category.name}>
-                            {category.name}
-                          </MenuItem>
-                        ))}
-                      </Field>
+                        categories={categories}
+                      />
                     </Grid>
                     <Grid item xs={12}>
                       <Field
                         name="body"
+                        component={renderTextFieldMultiline}
                         label="Body"
-                        validate={[required, minValue18]}
-                        component={TextField}
-                        placeholder="Cool story brah (minimum of 18 chacters bRAAh)!"
-                        multiline
-                        fullWidth
                       />
                     </Grid>
                     <Grid item xs={4}>
@@ -145,6 +201,16 @@ ContentPostForm.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
+const mapDispatchToProps = { postCreatePost };
+
 export default reduxForm({
-  form: "NewPostValidation"
-})(withRouter(withStyles(styles, { withTheme: true })(ContentPostForm)));
+  form: "NewPostValidation",
+  validate
+})(
+  withRouter(
+    connect(
+      undefined,
+      mapDispatchToProps
+    )(withStyles(styles, { withTheme: true })(ContentPostForm))
+  )
+);

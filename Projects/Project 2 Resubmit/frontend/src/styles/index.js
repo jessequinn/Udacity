@@ -1,3 +1,4 @@
+// form taken from example at https://material-ui.com/demos/drawers/
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -91,6 +92,11 @@ const styles = theme => ({
   link: {
     paddingLeft: 0,
     marginLeft: 0
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200
   }
 });
 

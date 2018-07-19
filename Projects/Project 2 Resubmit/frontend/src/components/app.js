@@ -23,7 +23,7 @@ import Content from "./content.js";
 import styles from "../styles";
 
 // call actions
-import { getCategories, getPostsWithComments } from "../actions";
+import { getCategories } from "../actions";
 
 class App extends Component {
   state = {
@@ -40,7 +40,6 @@ class App extends Component {
 
   componentDidMount() {
     this.props.getCategories();
-    this.props.getPostsWithComments();
   }
 
   render() {
@@ -107,12 +106,13 @@ App.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
+const mapDispatchToProps = {
+  getCategories
+};
+
 export default withRouter(
   connect(
     undefined,
-    {
-      getCategories,
-      getPostsWithComments
-    }
+    mapDispatchToProps
   )(withStyles(styles, { withTheme: true })(App))
 );

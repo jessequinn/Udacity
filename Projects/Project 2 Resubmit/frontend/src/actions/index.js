@@ -1,29 +1,39 @@
 // actions and reducers design are based on https://scotch.io/tutorials/bookshop-with-react-redux-ii-async-requests-with-thunks
-import Axios from "axios";
-import qs from "qs";
-import { v5 } from "uuid";
 
-export const ROOT_URL = "http://localhost:3001";
-export const HEADERS = {
-  Authorization: "jessequinn",
-  "Content-Type": "application/json"
+// https://github.com/axios/axios refer to document as reference
+import Axios from "axios";
+
+// https://www.npmjs.com/package/uuid
+import { v4 } from "uuid";
+
+const ROOT_URL = "http://localhost:3001";
+const HEADERS = {
+  "Content-Type": "application/json",
+  Accept: "application/json",
+  Authorization: "jessequinn"
 };
+
+const Api = Axios.create({
+  baseURL: ROOT_URL,
+  headers: HEADERS
+});
 
 export const GET_CATEGORIES_SUCCESS = "GET_CATEGORIES_SUCCESS";
 
 export const GET_POSTS_SUCCESS = "GET_POSTS_SUCCESS";
-export const POST_UPVOTE_SUCCESS = "POST_UPVOTE_SUCCESS";
-export const POST_DOWNVOTE_SUCCESS = "POST_DOWNVOTE_SUCCESS";
-export const CREATE_POST_SUCCESS = "CREATE_POST_SUCCESS";
+export const POST_UPVOTE_POST_SUCCESS = "POST_UPVOTE_POST_SUCCESS";
+export const POST_DOWNVOTE_POST_SUCCESS = "POST_DOWNVOTE_POST_SUCCESS";
+export const POST_CREATE_POST_SUCCESS = "POST_CREATE_POST_SUCCESS";
+export const DELETE_DELETE_POST_SUCCESS = "DELETE_DELETE_POST_SUCCESS";
+export const GET_POSTS_FROM_CATEGORY_WITH_COMMENTS_SUCCESS =
+  "GET_POSTS_FROM_CATEGORY_WITH_COMMENTS_SUCCESS";
 
 export const GET_COMMENTS_SUCCESS = "GET_COMMENTS_SUCCESS";
 
 export const getCategories = () => {
   return dispatch => {
-    return Axios.get(`${ROOT_URL}/categories`, { headers: HEADERS })
+    return Api.get(`/categories`)
       .then(response => {
-        // console.log("Categories: " + response.data)
-        // console.log(response.data.categories);
         dispatch(getCategoriesSuccess(response.data.categories));
       })
       .catch(error => {
@@ -41,12 +51,10 @@ const getCategoriesSuccess = categories => {
 
 export const getPostsWithComments = () => {
   return dispatch => {
-    return Axios.get(`${ROOT_URL}/posts`, { headers: HEADERS })
+    return Api.get(`/posts`)
       .then(response => {
         dispatch(getPostsSuccess(response.data));
-        // console.log("Posts: " + response.data)
-        // console.log(response.data);
-        response.data.map(({ id }) => dispatch(getComments(id)));
+        // response.data.map(({ id }) => dispatch(getComments(id)));
       })
       .catch(error => {
         throw error;
@@ -63,10 +71,7 @@ const getPostsSuccess = posts => {
 
 export const getComments = pid => {
   return dispatch => {
-    return Axios.get(`${ROOT_URL}/posts/${pid}/comments`, {
-      headers: HEADERS
-    }).then(response => {
-      // console.log("Comments:" + response.data);
+    return Api.get(`/posts/${pid}/comments`).then(response => {
       dispatch(getCommentsSuccess(response.data));
     });
   };
@@ -79,21 +84,13 @@ const getCommentsSuccess = comments => {
   };
 };
 
-// refer to https://github.com/axios/axios#using-applicationx-www-form-urlencoded-format
 export const postUpVotePost = pid => {
   return dispatch => {
-    return Axios({
-      method: "POST",
-      headers: {
-        Authorization: "jessequinn",
-        "content-type": "application/x-www-form-urlencoded"
-      },
-      data: qs.stringify({ option: "upVote" }),
-      url: `${ROOT_URL}/posts/${pid}`
+    return Api.post(`/posts/${pid}`, {
+      option: "upVote"
     })
       .then(response => {
-        // console.log(response.data);
-        dispatch(postUpVotePostSuccess(response.data.id));
+        dispatch(postUpVotePostSuccess(response.data));
       })
       .catch(error => {
         throw error;
@@ -101,27 +98,18 @@ export const postUpVotePost = pid => {
   };
 };
 
-const postUpVotePostSuccess = id => {
+const postUpVotePostSuccess = post => {
   return {
-    type: POST_UPVOTE_SUCCESS,
-    id
+    type: POST_UPVOTE_POST_SUCCESS,
+    post
   };
 };
 
 export const postDownVotePost = pid => {
   return dispatch => {
-    return Axios({
-      method: "POST",
-      headers: {
-        Authorization: "jessequinn",
-        "content-type": "application/x-www-form-urlencoded"
-      },
-      data: qs.stringify({ option: "downVote" }),
-      url: `${ROOT_URL}/posts/${pid}`
-    })
+    return Api.post(`/posts/${pid}`, { option: "downVote" })
       .then(response => {
-        // console.log(response.data);
-        dispatch(postDownVotePostSuccess(response.data.id));
+        dispatch(postDownVotePostSuccess(response.data));
       })
       .catch(error => {
         throw error;
@@ -129,36 +117,71 @@ export const postDownVotePost = pid => {
   };
 };
 
-const postDownVotePostSuccess = id => {
+const postDownVotePostSuccess = post => {
   return {
-    type: POST_DOWNVOTE_SUCCESS,
-    id
+    type: POST_DOWNVOTE_POST_SUCCESS,
+    post
   };
 };
 
 export const postCreatePost = pdata => {
   return dispatch => {
-    return Axios({
-      method: "POST",
-      headers: {
-        Authorization: "jessequinn",
-        "content-type": "application/x-www-form-urlencoded"
-      },
-      data: qs.stringify({
-        id: v5(),
-        timestamp: Date.now(),
-        ...pdata
-      }),
-      url: `${ROOT_URL}/posts`
-    }).then(response => {
-      dispatch(postCreatePostSuccess(response.data.post));
-    });
+    return Api.post(`/posts`, {
+      id: v4(),
+      timestamp: Date.now(),
+      ...pdata
+    })
+      .then(response => {
+        dispatch(postCreatePostSuccess(response.data));
+      })
+      .catch(error => {
+        throw error;
+      });
   };
 };
 
 const postCreatePostSuccess = post => {
   return {
-    type: CREATE_POST_SUCCESS,
+    type: POST_CREATE_POST_SUCCESS,
     post
+  };
+};
+
+export const deleteDeletePost = pid => {
+  return dispatch => {
+    return Api.delete(`/posts/${pid}`)
+      .then(response => {
+        dispatch(deleteDeletePostSuccess(response.data));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+};
+
+const deleteDeletePostSuccess = post => {
+  return {
+    type: DELETE_DELETE_POST_SUCCESS,
+    post
+  };
+};
+
+export const getPostsFromCategoryWithComments = category => {
+  return dispatch => {
+    return Api.get(`/${category}/posts`)
+      .then(response => {
+        dispatch(getPostsFromCategoryWithCommentsSuccess(response.data));
+        // response.data.map(({ id }) => dispatch(getComments(id)));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+};
+
+const getPostsFromCategoryWithCommentsSuccess = posts => {
+  return {
+    type: GET_POSTS_FROM_CATEGORY_WITH_COMMENTS_SUCCESS,
+    posts
   };
 };
