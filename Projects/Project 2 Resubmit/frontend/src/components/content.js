@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid";
 // components
 import ContentPostList from "./content_post_list";
 import ContentPostForm from "./content_post_form";
+import ContentPostDetail from "./content_post_detail";
 
 // call actions
 import { postUpVotePost, postDownVotePost, deleteDeletePost } from "../actions";
@@ -21,17 +22,22 @@ const Content = props => {
           <Route
             exact
             path="/"
-            component={props => <ContentPostList {...props} />}
-          />
-          <Route
-            path="/:category"
-            exact
-            component={props => <ContentPostList {...props} />}
+            component={() => <ContentPostList {...props} />}
           />
           <Route
             exact
             path="/posts/new"
             render={() => <ContentPostForm {...props} />}
+          />
+          <Route
+            path="/:category"
+            exact
+            component={() => <ContentPostList {...props} />}
+          />
+          <Route
+            path="/:category/:id"
+            exact
+            component={() => <ContentPostDetail {...props} />}
           />
         </Switch>
       </Grid>

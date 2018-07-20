@@ -19,7 +19,7 @@ const Api = Axios.create({
 });
 
 export const GET_CATEGORIES_SUCCESS = "GET_CATEGORIES_SUCCESS";
-
+export const GET_POST_SUCCESS = "GET_POST_SUCCESS";
 export const GET_POSTS_SUCCESS = "GET_POSTS_SUCCESS";
 export const POST_UPVOTE_POST_SUCCESS = "POST_UPVOTE_POST_SUCCESS";
 export const POST_DOWNVOTE_POST_SUCCESS = "POST_DOWNVOTE_POST_SUCCESS";
@@ -49,12 +49,30 @@ const getCategoriesSuccess = categories => {
   };
 };
 
-export const getPostsWithComments = () => {
+export const getPost = pid => {
+  return dispatch => {
+    return Api.get(`/posts/${pid}`)
+      .then(response => {
+        dispatch(getPostSuccess(response.data));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+};
+
+const getPostSuccess = post => {
+  return {
+    type: GET_POST_SUCCESS,
+    post
+  };
+};
+
+export const getPosts = () => {
   return dispatch => {
     return Api.get(`/posts`)
       .then(response => {
         dispatch(getPostsSuccess(response.data));
-        // response.data.map(({ id }) => dispatch(getComments(id)));
       })
       .catch(error => {
         throw error;
@@ -73,6 +91,7 @@ export const getComments = pid => {
   return dispatch => {
     return Api.get(`/posts/${pid}/comments`).then(response => {
       dispatch(getCommentsSuccess(response.data));
+      console.log(response.data);
     });
   };
 };

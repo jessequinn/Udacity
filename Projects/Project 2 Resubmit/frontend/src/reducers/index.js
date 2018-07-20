@@ -8,6 +8,7 @@ import { reducer as formReducer } from "redux-form";
 // actions and reducers design are based on https://scotch.io/tutorials/bookshop-with-react-redux-ii-async-requests-with-thunks
 import {
   GET_CATEGORIES_SUCCESS,
+  GET_POST_SUCCESS,
   GET_POSTS_SUCCESS,
   GET_COMMENTS_SUCCESS,
   POST_UPVOTE_POST_SUCCESS,
@@ -21,6 +22,15 @@ const categories = (state = [], action) => {
   switch (action.type) {
     case GET_CATEGORIES_SUCCESS:
       return action.categories;
+    default:
+      return state;
+  }
+};
+
+const post = (state = {}, action) => {
+  switch (action.type) {
+    case GET_POST_SUCCESS:
+      return action.post;
     default:
       return state;
   }
@@ -57,7 +67,7 @@ const posts = (state = [], action) => {
 const comments = (state = [], action) => {
   switch (action.type) {
     case GET_COMMENTS_SUCCESS:
-      return [...action.comments];
+      return action.comments;
     default:
       return state;
   }
@@ -65,6 +75,7 @@ const comments = (state = [], action) => {
 
 export default combineReducers({
   categories,
+  post,
   posts,
   comments,
   form: formReducer
