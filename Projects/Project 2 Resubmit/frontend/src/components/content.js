@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 // https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/withRouter.md
 import { withRouter, Switch, Route } from "react-router-dom";
 import { connect } from "react-redux";
@@ -14,36 +14,38 @@ import ContentPostDetail from "./content_post_detail";
 // call actions
 import { postUpVotePost, postDownVotePost, deleteDeletePost } from "../actions";
 
-const Content = props => {
-  return (
-    <Grid container spacing={24}>
-      <Grid item xs={12}>
-        <Switch>
-          <Route
-            exact
-            path="/"
-            component={() => <ContentPostList {...props} />}
-          />
-          <Route
-            exact
-            path="/posts/new"
-            render={() => <ContentPostForm {...props} />}
-          />
-          <Route
-            path="/:category"
-            exact
-            component={() => <ContentPostList {...props} />}
-          />
-          <Route
-            path="/:category/:id"
-            exact
-            component={() => <ContentPostDetail {...props} />}
-          />
-        </Switch>
+class Content extends Component {
+  render() {
+    return (
+      <Grid container spacing={24}>
+        <Grid item xs={12}>
+          <Switch>
+            <Route
+              exact
+              path="/"
+              component={props => <ContentPostList {...props} />}
+            />
+            <Route
+              exact
+              path="/posts/new"
+              component={props => <ContentPostForm {...props} />}
+            />
+            <Route
+              path="/:category"
+              exact
+              component={props => <ContentPostList {...props} />}
+            />
+            <Route
+              path="/:category/:id"
+              exact
+              component={props => <ContentPostDetail {...props} />}
+            />
+          </Switch>
+        </Grid>
       </Grid>
-    </Grid>
-  );
-};
+    );
+  }
+}
 
 const mapStateToProps = state => ({
   categories: state.categories
@@ -55,9 +57,7 @@ const mapDispatchToProps = {
   onDeleteDeletePost: deleteDeletePost
 };
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Content)
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Content);

@@ -15,7 +15,7 @@ import {
   POST_DOWNVOTE_POST_SUCCESS,
   POST_CREATE_POST_SUCCESS,
   DELETE_DELETE_POST_SUCCESS,
-  GET_POSTS_FROM_CATEGORY_WITH_COMMENTS_SUCCESS
+  GET_POSTS_FOR_CATEGORY_SUCCESS
 } from "../actions";
 
 const categories = (state = [], action) => {
@@ -30,6 +30,8 @@ const categories = (state = [], action) => {
 const post = (state = {}, action) => {
   switch (action.type) {
     case GET_POST_SUCCESS:
+    case POST_UPVOTE_POST_SUCCESS:
+    case POST_DOWNVOTE_POST_SUCCESS:
       return action.post;
     default:
       return state;
@@ -39,7 +41,7 @@ const post = (state = {}, action) => {
 const posts = (state = [], action) => {
   switch (action.type) {
     case GET_POSTS_SUCCESS:
-    case GET_POSTS_FROM_CATEGORY_WITH_COMMENTS_SUCCESS:
+    case GET_POSTS_FOR_CATEGORY_SUCCESS:
       return action.posts;
     case POST_UPVOTE_POST_SUCCESS:
     case POST_DOWNVOTE_POST_SUCCESS:

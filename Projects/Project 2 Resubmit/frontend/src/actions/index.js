@@ -25,8 +25,7 @@ export const POST_UPVOTE_POST_SUCCESS = "POST_UPVOTE_POST_SUCCESS";
 export const POST_DOWNVOTE_POST_SUCCESS = "POST_DOWNVOTE_POST_SUCCESS";
 export const POST_CREATE_POST_SUCCESS = "POST_CREATE_POST_SUCCESS";
 export const DELETE_DELETE_POST_SUCCESS = "DELETE_DELETE_POST_SUCCESS";
-export const GET_POSTS_FROM_CATEGORY_WITH_COMMENTS_SUCCESS =
-  "GET_POSTS_FROM_CATEGORY_WITH_COMMENTS_SUCCESS";
+export const GET_POSTS_FOR_CATEGORY_SUCCESS = "GET_POSTS_FOR_CATEGORY_SUCCESS";
 
 export const GET_COMMENTS_SUCCESS = "GET_COMMENTS_SUCCESS";
 
@@ -185,12 +184,11 @@ const deleteDeletePostSuccess = post => {
   };
 };
 
-export const getPostsFromCategoryWithComments = category => {
+export const getPostsForCategory = category => {
   return dispatch => {
     return Api.get(`/${category}/posts`)
       .then(response => {
-        dispatch(getPostsFromCategoryWithCommentsSuccess(response.data));
-        // response.data.map(({ id }) => dispatch(getComments(id)));
+        dispatch(getPostsForCategorySuccess(response.data));
       })
       .catch(error => {
         throw error;
@@ -198,9 +196,9 @@ export const getPostsFromCategoryWithComments = category => {
   };
 };
 
-const getPostsFromCategoryWithCommentsSuccess = posts => {
+const getPostsForCategorySuccess = posts => {
   return {
-    type: GET_POSTS_FROM_CATEGORY_WITH_COMMENTS_SUCCESS,
+    type: GET_POSTS_FOR_CATEGORY_SUCCESS,
     posts
   };
 };

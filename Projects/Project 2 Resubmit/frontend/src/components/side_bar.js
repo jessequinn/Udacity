@@ -1,7 +1,6 @@
 import _ from "lodash";
-
 import React from "react";
-import { withRouter, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 // material-ui
@@ -65,4 +64,4 @@ const mapStateToProps = state => ({
   categories: state.categories
 });
 
-export default withRouter(connect(mapStateToProps)(SideBar));
+export default connect(mapStateToProps)(SideBar);
