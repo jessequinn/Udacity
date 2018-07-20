@@ -35,6 +35,7 @@ import {
 
 // components
 import SideBar from "./side_bar.js";
+import PostEditModal from "./post_edit_modal";
 
 // actions
 import {
@@ -75,6 +76,7 @@ class ContentPostDetail extends Component {
     const {
       classes,
       theme,
+      categories,
       post,
       comments,
       onPostUpVotePost,
@@ -82,6 +84,8 @@ class ContentPostDetail extends Component {
       onDeleteDeletePost,
       onDeleteDeleteComment
     } = this.props;
+
+    // console.log(post);
 
     return (
       <div className={classes.root}>
@@ -190,13 +194,7 @@ class ContentPostDetail extends Component {
                   >
                     <ThumbDown className={classes.spacing} />
                   </IconButton>
-                  <IconButton
-                    component={Link}
-                    to={`/${post.category}/${post.id}/edit`}
-                    className={classes.button}
-                  >
-                    <TooltipEdit className={classes.spacing} />
-                  </IconButton>
+                  <PostEditModal initialValues={post} {...this.props} />
                   <IconButton
                     onClick={() => {
                       onDeleteDeletePost(post.id);
@@ -245,13 +243,13 @@ class ContentPostDetail extends Component {
                       <IconButton
                         className={classes.button}
                         onClick={() => {
-                          onPostUpVotePost(post.id);
+                          onPostUpVotePost(comment.id);
                         }}
                       >
                         <ThumbUp className={classes.spacing} />
                       </IconButton>
                       <Typography color="textSecondary">
-                        {post.voteScore}
+                        {comment.voteScore}
                       </Typography>
                       <IconButton
                         className={classes.button}
@@ -294,6 +292,7 @@ ContentPostDetail.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  categories: state.categories,
   post: state.post,
   comments: state.comments
 });

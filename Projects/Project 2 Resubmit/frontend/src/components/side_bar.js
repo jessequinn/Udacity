@@ -16,7 +16,6 @@ import { Home, Fingerprint } from "mdi-material-ui";
 
 const SideBar = props => {
   const { location, categories } = props;
-  // console.log(categories);
 
   return (
     <Grid container spacing={24}>

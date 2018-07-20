@@ -14,6 +14,7 @@ import {
   POST_UPVOTE_POST_SUCCESS,
   POST_DOWNVOTE_POST_SUCCESS,
   POST_CREATE_POST_SUCCESS,
+  PUT_EDIT_POST_SUCCESS,
   DELETE_DELETE_POST_SUCCESS,
   DELETE_DELETE_COMMENT_SUCCESS,
   GET_POSTS_FOR_CATEGORY_SUCCESS
@@ -33,6 +34,7 @@ const post = (state = {}, action) => {
     case GET_POST_SUCCESS:
     case POST_UPVOTE_POST_SUCCESS:
     case POST_DOWNVOTE_POST_SUCCESS:
+    case PUT_EDIT_POST_SUCCESS:
       return action.post;
     default:
       return state;
@@ -58,6 +60,16 @@ const posts = (state = [], action) => {
       });
     case POST_CREATE_POST_SUCCESS:
       return [...state, action.post];
+      case PUT_EDIT_POST_SUCCESS:
+      return _.map(state, post => {
+        if (post.id === action.post.id) {
+          return {
+            ...action.post,
+          };
+        } else {
+          return post;
+        }
+      });
     case DELETE_DELETE_POST_SUCCESS:
       return _.filter(state, post => {
         return post.id !== action.post.id;

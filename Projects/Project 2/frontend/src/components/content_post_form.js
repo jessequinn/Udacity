@@ -13,12 +13,12 @@ import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import NativeSelect from '@material-ui/core/NativeSelect';
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+// import Select from "@material-ui/core/Select";
+import NativeSelect from "@material-ui/core/NativeSelect";
 
 // redux-form-material-ui
 import { Select, TextField } from "redux-form-material-ui";
@@ -59,11 +59,13 @@ class ContentPostForm extends React.Component {
       createPost,
       editPost,
       history,
-      match
+      match,
+      initialValues
     } = this.props;
 
     const isEdit = match.url.indexOf("edit") !== -1;
 
+    console.log(initialValues);
     return (
       <Grid container spacing={24}>
         <Grid item xs={12}>
@@ -120,7 +122,11 @@ class ContentPostForm extends React.Component {
                         />
                       </Grid>
                       <Grid item xs={3}>
-                        <Typography variant="subheading" gutterBottom align="center">
+                        <Typography
+                          variant="subheading"
+                          gutterBottom
+                          align="center"
+                        >
                           Category
                         </Typography>
                         {/* Select Field not working correctly. I have submitted a bug report to respective creator */}

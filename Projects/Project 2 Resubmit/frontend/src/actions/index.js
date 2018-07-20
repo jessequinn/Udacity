@@ -26,7 +26,7 @@ export const POST_DOWNVOTE_POST_SUCCESS = "POST_DOWNVOTE_POST_SUCCESS";
 export const POST_CREATE_POST_SUCCESS = "POST_CREATE_POST_SUCCESS";
 export const DELETE_DELETE_POST_SUCCESS = "DELETE_DELETE_POST_SUCCESS";
 export const GET_POSTS_FOR_CATEGORY_SUCCESS = "GET_POSTS_FOR_CATEGORY_SUCCESS";
-
+export const PUT_EDIT_POST_SUCCESS = "PUT_EDIT_POST_SUCCESS";
 export const DELETE_DELETE_COMMENT_SUCCESS = "DELETE_DELETE_COMMENT_SUCCESS";
 export const GET_COMMENTS_SUCCESS = "GET_COMMENTS_SUCCESS";
 
@@ -91,7 +91,6 @@ export const getComments = pid => {
   return dispatch => {
     return Api.get(`/posts/${pid}/comments`).then(response => {
       dispatch(getCommentsSuccess(response.data));
-      console.log(response.data);
     });
   };
 };
@@ -181,6 +180,26 @@ export const deleteDeletePost = pid => {
 const deleteDeletePostSuccess = post => {
   return {
     type: DELETE_DELETE_POST_SUCCESS,
+    post
+  };
+};
+
+export const putEditPost = (pid, pdata) => {
+  return dispatch => {
+    return Api.put(`/posts/${pid}`, { ...pdata })
+      .then(response => {
+        dispatch(putEditPostSuccess(response.data));
+        console.log(response.data);
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+};
+
+const putEditPostSuccess = post => {
+  return {
+    type: PUT_EDIT_POST_SUCCESS,
     post
   };
 };
