@@ -43,7 +43,8 @@ import {
   getComments,
   postUpVotePost,
   postDownVotePost,
-  deleteDeletePost
+  deleteDeletePost,
+  deleteDeleteComment
 } from "../actions";
 
 import styles from "../styles";
@@ -78,7 +79,8 @@ class ContentPostDetail extends Component {
       comments,
       onPostUpVotePost,
       onPostDownVotePost,
-      onDeleteDeletePost
+      onDeleteDeletePost,
+      onDeleteDeleteComment
     } = this.props;
 
     return (
@@ -268,10 +270,8 @@ class ContentPostDetail extends Component {
                       </IconButton>
                       <IconButton
                         onClick={() => {
-                          onDeleteDeletePost(post.id);
+                          onDeleteDeleteComment(comment.id);
                         }}
-                        component={Link}
-                        to={"/"}
                         className={classes.button}
                       >
                         <CommentRemove className={classes.spacing} />
@@ -304,7 +304,8 @@ const mapDispatchToProps = {
   getComments,
   onPostUpVotePost: postUpVotePost,
   onPostDownVotePost: postDownVotePost,
-  onDeleteDeletePost: deleteDeletePost
+  onDeleteDeletePost: deleteDeletePost,
+  onDeleteDeleteComment: deleteDeleteComment
 };
 
 export default connect(

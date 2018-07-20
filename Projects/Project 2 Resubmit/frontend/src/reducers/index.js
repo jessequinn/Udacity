@@ -15,6 +15,7 @@ import {
   POST_DOWNVOTE_POST_SUCCESS,
   POST_CREATE_POST_SUCCESS,
   DELETE_DELETE_POST_SUCCESS,
+  DELETE_DELETE_COMMENT_SUCCESS,
   GET_POSTS_FOR_CATEGORY_SUCCESS
 } from "../actions";
 
@@ -70,6 +71,10 @@ const comments = (state = [], action) => {
   switch (action.type) {
     case GET_COMMENTS_SUCCESS:
       return action.comments;
+    case DELETE_DELETE_COMMENT_SUCCESS:
+      return _.filter(state, comment => {
+        return comment.id !== action.comment.id;
+      });
     default:
       return state;
   }

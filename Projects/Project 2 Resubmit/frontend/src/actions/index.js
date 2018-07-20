@@ -27,6 +27,7 @@ export const POST_CREATE_POST_SUCCESS = "POST_CREATE_POST_SUCCESS";
 export const DELETE_DELETE_POST_SUCCESS = "DELETE_DELETE_POST_SUCCESS";
 export const GET_POSTS_FOR_CATEGORY_SUCCESS = "GET_POSTS_FOR_CATEGORY_SUCCESS";
 
+export const DELETE_DELETE_COMMENT_SUCCESS = "DELETE_DELETE_COMMENT_SUCCESS";
 export const GET_COMMENTS_SUCCESS = "GET_COMMENTS_SUCCESS";
 
 export const getCategories = () => {
@@ -181,6 +182,25 @@ const deleteDeletePostSuccess = post => {
   return {
     type: DELETE_DELETE_POST_SUCCESS,
     post
+  };
+};
+
+export const deleteDeleteComment = cid => {
+  return dispatch => {
+    return Api.delete(`/comments/${cid}`)
+      .then(response => {
+        dispatch(deleteDeleteCommentSuccess(response.data));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+};
+
+const deleteDeleteCommentSuccess = comment => {
+  return {
+    type: DELETE_DELETE_COMMENT_SUCCESS,
+    comment
   };
 };
 
