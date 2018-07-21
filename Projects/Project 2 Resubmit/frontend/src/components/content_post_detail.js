@@ -68,15 +68,14 @@ class ContentPostDetail extends Component {
     const { match, getPost, getComments, getCategories } = this.props;
 
     getCategories();
-    getPost(match.params.id);
-    getComments(match.params.id);
+    getPost(match.params.post_id);
+    getComments(match.params.post_id);
   }
 
   render() {
     const {
       classes,
       theme,
-      categories,
       post,
       comments,
       onPostUpVotePost,

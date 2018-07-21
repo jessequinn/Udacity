@@ -24,18 +24,15 @@ import { putEditPost } from "../actions";
 // styles
 import styles from "../styles";
 
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
-
 function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
+  const top = "50";
+  const left = "50";
 
   return {
     top: `${top}%`,
     left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`
+    transform: `translate(-${top}%, -${left}%)`,
+    margin: "auto"
   };
 }
 
@@ -133,7 +130,7 @@ class PostEditModal extends Component {
       putEditPost
     } = this.props;
 
-    console.log(match)
+    // console.log(match)
 
     return (
       <div>
@@ -145,19 +142,15 @@ class PostEditModal extends Component {
           aria-describedby="simple-modal-description"
           open={this.state.open}
           onClose={this.handleClose}
+          style={{ alignItems: "center", justifyContent: "center" }}
         >
           <div style={getModalStyle()} className={classes.paper}>
             <form
               onSubmit={handleSubmit(pdata => {
-                const {
-                  title,
-                  author,
-                  category = categories[0].name,
-                  body
-                } = pdata;
-                pdata = { title, body, author, category };
+                const { title, body, category = categories[0].name } = pdata;
+                pdata = { title, body, category };
                 putEditPost(match.params.post_id, pdata);
-                this.handleClose;
+                this.handleClose();
               })}
             >
               <Grid container spacing={24}>
@@ -170,6 +163,7 @@ class PostEditModal extends Component {
                 </Grid>
                 <Grid item xs={3}>
                   <Field
+                    disabled
                     name="author"
                     component={this.renderTextField}
                     label="Author"
@@ -220,6 +214,10 @@ PostEditModal.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
+const mapDispatchToProps = {
+  putEditPost
+};
+
 // https://stackoverflow.com/questions/38881324/redux-form-initialvalues-not-updating-with-state
 export default reduxForm({
   form: "PostEditModal",
@@ -228,6 +226,6 @@ export default reduxForm({
 })(
   connect(
     undefined,
-    { putEditPost }
+    mapDispatchToProps
   )(withStyles(styles, { withTheme: true })(PostEditModal))
 );

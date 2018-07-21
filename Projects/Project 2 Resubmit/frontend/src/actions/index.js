@@ -189,7 +189,6 @@ export const putEditPost = (pid, pdata) => {
     return Api.put(`/posts/${pid}`, { ...pdata })
       .then(response => {
         dispatch(putEditPostSuccess(response.data));
-        console.log(response.data);
       })
       .catch(error => {
         throw error;

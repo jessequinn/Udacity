@@ -36,7 +36,7 @@ class App extends Component {
             component={props => <ContentPostList {...props} />}
           />
           <Route
-            path="/:category/:id"
+            path="/:category/:post_id"
             exact
             component={props => <ContentPostDetail {...props} />}
           />
