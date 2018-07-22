@@ -33,7 +33,7 @@ import SideBar from "./side_bar.js";
 // import ModalToggle from "./modal_toggle";
 import PostEditModal from "./post_edit_modal";
 import PostEditModalDetail from "./post_edit_modal_detail";
-// import CollectionFormModal from "./collection_form_modal";
+import CommentNewModalDetail from "./comment_new_modal_detail";
 
 // call actions
 import {
@@ -65,12 +65,7 @@ class ContentPostList extends Component {
   };
 
   componentDidMount() {
-    const {
-      match,
-      getPosts,
-      getPostsForCategory,
-      getCategories
-    } = this.props;
+    const { match, getPosts, getPostsForCategory, getCategories } = this.props;
 
     getCategories();
 
@@ -250,6 +245,14 @@ class ContentPostList extends Component {
                               Comments
                             </Typography>
                           </Badge>
+                          <Grid container spacing={24}>
+                            <Grid item xs={12} align="right">
+                              <CommentNewModalDetail
+                                pid={post.id}
+                                {...this.props}
+                              />
+                            </Grid>
+                          </Grid>
                         </CardActions>
                       </Card>
                     </Grid>

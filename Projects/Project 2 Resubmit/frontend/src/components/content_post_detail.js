@@ -36,6 +36,8 @@ import {
 // components
 import SideBar from "./side_bar.js";
 import PostEditModalDetail from "./post_edit_modal_detail";
+import CommentNewModalDetail from "./comment_new_modal_detail";
+import CommentEditModalDetail from "./comment_edit_modal_detail";
 
 // actions
 import {
@@ -93,7 +95,6 @@ class ContentPostDetail extends Component {
       onDeleteDeleteComment
     } = this.props;
 
-    console.log(match.params.post_id);
     !_.find(posts, ["id", match.params.post_id])
       ? (window.location = "/404")
       : null;
@@ -232,6 +233,13 @@ class ContentPostDetail extends Component {
                 </CardActions>
               </Card>
             </Grid>
+            <Grid item xs={12}>
+              <Card className={classes.card}>
+                <CardContent>
+                  <CommentNewModalDetail pid={post.id} {...this.props} />
+                </CardContent>
+              </Card>
+            </Grid>
           </Grid>
           {_.map(comments, comment => {
             return (
@@ -270,13 +278,11 @@ class ContentPostDetail extends Component {
                       >
                         <ThumbDown className={classes.spacing} />
                       </IconButton>
-                      <IconButton
-                        component={Link}
-                        to={`/${post.category}/${post.id}/edit`}
-                        className={classes.button}
-                      >
-                        <TooltipEdit className={classes.spacing} />
-                      </IconButton>
+                      <CommentEditModalDetail
+                        form={comment.id}
+                        initialValues={comment}
+                        {...this.props}
+                      />
                       <IconButton
                         onClick={() => {
                           onDeleteDeleteComment(comment.id);

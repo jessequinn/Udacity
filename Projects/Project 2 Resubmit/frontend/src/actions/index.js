@@ -21,9 +21,7 @@ const Api = Axios.create({
 export const GET_CATEGORIES_SUCCESS = "GET_CATEGORIES_SUCCESS";
 export const GET_POST_SUCCESS = "GET_POST_SUCCESS";
 export const GET_POSTS_SUCCESS = "GET_POSTS_SUCCESS";
-export const POST_CREATE_POST_SUCCESS = "POST_CREATE_POST_SUCCESS";
 export const GET_POSTS_FOR_CATEGORY_SUCCESS = "GET_POSTS_FOR_CATEGORY_SUCCESS";
-export const PUT_EDIT_POST_SUCCESS = "PUT_EDIT_POST_SUCCESS";
 export const GET_COMMENTS_SUCCESS = "GET_COMMENTS_SUCCESS";
 
 // deleting
@@ -35,6 +33,14 @@ export const POST_UPVOTE_POST_SUCCESS = "POST_UPVOTE_POST_SUCCESS";
 export const POST_DOWNVOTE_POST_SUCCESS = "POST_DOWNVOTE_POST_SUCCESS";
 export const POST_UPVOTE_COMMENT_SUCCESS = "POST_UPVOTE_COMMENT_SUCCESS";
 export const POST_DOWNVOTE_COMMENT_SUCCESS = "POST_DOWNVOTE_COMMENT_SUCCESS";
+
+// creating
+export const POST_CREATE_POST_SUCCESS = "POST_CREATE_POST_SUCCESS";
+export const POST_CREATE_COMMENT_SUCCESS = "POST_CREATE_COMMENT_SUCCESS";
+
+// editing
+export const PUT_EDIT_POST_SUCCESS = "PUT_EDIT_POST_SUCCESS";
+export const PUT_EDIT_COMMENT_SUCCESS = "PUT_EDIT_COMMENT_SUCCESS"
 
 export const getCategories = () => {
   return dispatch => {
@@ -108,48 +114,6 @@ const getCommentsSuccess = comments => {
   };
 };
 
-export const postCreatePost = pdata => {
-  return dispatch => {
-    return Api.post(`/posts`, {
-      id: v4(),
-      timestamp: Date.now(),
-      ...pdata
-    })
-      .then(response => {
-        dispatch(postCreatePostSuccess(response.data));
-      })
-      .catch(error => {
-        throw error;
-      });
-  };
-};
-
-const postCreatePostSuccess = post => {
-  return {
-    type: POST_CREATE_POST_SUCCESS,
-    post
-  };
-};
-
-export const putEditPost = (pid, pdata) => {
-  return dispatch => {
-    return Api.put(`/posts/${pid}`, { ...pdata })
-      .then(response => {
-        dispatch(putEditPostSuccess(response.data));
-      })
-      .catch(error => {
-        throw error;
-      });
-  };
-};
-
-const putEditPostSuccess = post => {
-  return {
-    type: PUT_EDIT_POST_SUCCESS,
-    post
-  };
-};
-
 export const getPostsForCategory = category => {
   return dispatch => {
     return Api.get(`/${category}/posts`)
@@ -170,7 +134,7 @@ const getPostsForCategorySuccess = posts => {
 };
 
 ///////////////////////////////////////
-// Voting
+// voting
 ///////////////////////////////////////
 export const postUpVotePost = pid => {
   return dispatch => {
@@ -253,7 +217,7 @@ const postDownVoteCommentSuccess = comment => {
 };
 
 ///////////////////////////////////////
-// Deleting
+// deleting
 ///////////////////////////////////////
 export const deleteDeletePost = pid => {
   return dispatch => {
@@ -289,6 +253,97 @@ export const deleteDeleteComment = cid => {
 const deleteDeleteCommentSuccess = comment => {
   return {
     type: DELETE_DELETE_COMMENT_SUCCESS,
+    comment
+  };
+};
+
+///////////////////////////////////////
+// creating
+///////////////////////////////////////
+export const postCreatePost = pdata => {
+  return dispatch => {
+    return Api.post(`/posts`, {
+      id: v4(),
+      timestamp: Date.now(),
+      ...pdata
+    })
+      .then(response => {
+        dispatch(postCreatePostSuccess(response.data));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+};
+
+const postCreatePostSuccess = post => {
+  return {
+    type: POST_CREATE_POST_SUCCESS,
+    post
+  };
+};
+
+export const postCreateComment = (parentId, cdata) => {
+  return dispatch => {
+    return Api.post(`/comments`, {
+      id: v4(),
+      timestamp: Date.now(),
+      parentId,
+      ...cdata
+    })
+      .then(response => {
+        dispatch(postCreateCommentSuccess(response.data));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+};
+
+const postCreateCommentSuccess = comment => {
+  return {
+    type: POST_CREATE_COMMENT_SUCCESS,
+    comment
+  };
+};
+
+///////////////////////////////////////
+// editing
+///////////////////////////////////////
+export const putEditPost = (pid, pdata) => {
+  return dispatch => {
+    return Api.put(`/posts/${pid}`, { ...pdata })
+      .then(response => {
+        dispatch(putEditPostSuccess(response.data));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+};
+
+const putEditPostSuccess = post => {
+  return {
+    type: PUT_EDIT_POST_SUCCESS,
+    post
+  };
+};
+
+export const putEditComment = (cid, cdata) => {
+  return dispatch => {
+    return Api.put(`/comments/${cid}`, { ...cdata })
+      .then(response => {
+        dispatch(putEditCommentSuccess(response.data));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+};
+
+const putEditCommentSuccess = comment => {
+  return {
+    type: PUT_EDIT_COMMENT_SUCCESS,
     comment
   };
 };
