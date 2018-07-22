@@ -35,7 +35,7 @@ import {
 
 // components
 import SideBar from "./side_bar.js";
-import PostEditModal from "./post_edit_modal";
+import PostEditModalDetail from "./post_edit_modal_detail";
 
 // actions
 import {
@@ -44,6 +44,8 @@ import {
   getComments,
   postUpVotePost,
   postDownVotePost,
+  postUpVoteComment,
+  postDownVoteComment,
   deleteDeletePost,
   deleteDeleteComment
 } from "../actions";
@@ -80,6 +82,8 @@ class ContentPostDetail extends Component {
       comments,
       onPostUpVotePost,
       onPostDownVotePost,
+      onPostUpVoteComment,
+      onPostDownVoteComment,
       onDeleteDeletePost,
       onDeleteDeleteComment
     } = this.props;
@@ -193,7 +197,7 @@ class ContentPostDetail extends Component {
                   >
                     <ThumbDown className={classes.spacing} />
                   </IconButton>
-                  <PostEditModal initialValues={post} {...this.props} />
+                  <PostEditModalDetail initialValues={post} {...this.props} />
                   <IconButton
                     onClick={() => {
                       onDeleteDeletePost(post.id);
@@ -242,7 +246,7 @@ class ContentPostDetail extends Component {
                       <IconButton
                         className={classes.button}
                         onClick={() => {
-                          onPostUpVotePost(comment.id);
+                          onPostUpVoteComment(comment.id);
                         }}
                       >
                         <ThumbUp className={classes.spacing} />
@@ -253,7 +257,7 @@ class ContentPostDetail extends Component {
                       <IconButton
                         className={classes.button}
                         onClick={() => {
-                          onPostDownVotePost(comment.id);
+                          onPostDownVoteComment(comment.id);
                         }}
                       >
                         <ThumbDown className={classes.spacing} />
@@ -302,6 +306,8 @@ const mapDispatchToProps = {
   getComments,
   onPostUpVotePost: postUpVotePost,
   onPostDownVotePost: postDownVotePost,
+  onPostUpVoteComment: postUpVoteComment,
+  onPostDownVoteComment: postDownVoteComment,
   onDeleteDeletePost: deleteDeletePost,
   onDeleteDeleteComment: deleteDeleteComment
 };

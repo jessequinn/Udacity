@@ -21,14 +21,19 @@ const Api = Axios.create({
 export const GET_CATEGORIES_SUCCESS = "GET_CATEGORIES_SUCCESS";
 export const GET_POST_SUCCESS = "GET_POST_SUCCESS";
 export const GET_POSTS_SUCCESS = "GET_POSTS_SUCCESS";
-export const POST_UPVOTE_POST_SUCCESS = "POST_UPVOTE_POST_SUCCESS";
-export const POST_DOWNVOTE_POST_SUCCESS = "POST_DOWNVOTE_POST_SUCCESS";
 export const POST_CREATE_POST_SUCCESS = "POST_CREATE_POST_SUCCESS";
 export const DELETE_DELETE_POST_SUCCESS = "DELETE_DELETE_POST_SUCCESS";
 export const GET_POSTS_FOR_CATEGORY_SUCCESS = "GET_POSTS_FOR_CATEGORY_SUCCESS";
 export const PUT_EDIT_POST_SUCCESS = "PUT_EDIT_POST_SUCCESS";
 export const DELETE_DELETE_COMMENT_SUCCESS = "DELETE_DELETE_COMMENT_SUCCESS";
 export const GET_COMMENTS_SUCCESS = "GET_COMMENTS_SUCCESS";
+
+
+// voting
+export const POST_UPVOTE_POST_SUCCESS = "POST_UPVOTE_POST_SUCCESS";
+export const POST_DOWNVOTE_POST_SUCCESS = "POST_DOWNVOTE_POST_SUCCESS";
+export const POST_UPVOTE_COMMENT_SUCCESS = "POST_UPVOTE_COMMENT_SUCCESS";
+export const POST_DOWNVOTE_COMMENT_SUCCESS = "POST_DOWNVOTE_COMMENT_SUCCESS";
 
 export const getCategories = () => {
   return dispatch => {
@@ -99,46 +104,6 @@ const getCommentsSuccess = comments => {
   return {
     type: GET_COMMENTS_SUCCESS,
     comments
-  };
-};
-
-export const postUpVotePost = pid => {
-  return dispatch => {
-    return Api.post(`/posts/${pid}`, {
-      option: "upVote"
-    })
-      .then(response => {
-        dispatch(postUpVotePostSuccess(response.data));
-      })
-      .catch(error => {
-        throw error;
-      });
-  };
-};
-
-const postUpVotePostSuccess = post => {
-  return {
-    type: POST_UPVOTE_POST_SUCCESS,
-    post
-  };
-};
-
-export const postDownVotePost = pid => {
-  return dispatch => {
-    return Api.post(`/posts/${pid}`, { option: "downVote" })
-      .then(response => {
-        dispatch(postDownVotePostSuccess(response.data));
-      })
-      .catch(error => {
-        throw error;
-      });
-  };
-};
-
-const postDownVotePostSuccess = post => {
-  return {
-    type: POST_DOWNVOTE_POST_SUCCESS,
-    post
   };
 };
 
@@ -238,5 +203,88 @@ const getPostsForCategorySuccess = posts => {
   return {
     type: GET_POSTS_FOR_CATEGORY_SUCCESS,
     posts
+  };
+};
+
+///////////////////////////////////////
+// Voting
+///////////////////////////////////////
+export const postUpVotePost = pid => {
+  return dispatch => {
+    return Api.post(`/posts/${pid}`, {
+      option: "upVote"
+    })
+      .then(response => {
+        dispatch(postUpVotePostSuccess(response.data));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+};
+
+const postUpVotePostSuccess = post => {
+  return {
+    type: POST_UPVOTE_POST_SUCCESS,
+    post
+  };
+};
+
+export const postDownVotePost = pid => {
+  return dispatch => {
+    return Api.post(`/posts/${pid}`, { option: "downVote" })
+      .then(response => {
+        dispatch(postDownVotePostSuccess(response.data));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+};
+
+const postDownVotePostSuccess = post => {
+  return {
+    type: POST_DOWNVOTE_POST_SUCCESS,
+    post
+  };
+};
+
+export const postUpVoteComment = cid => {
+  return dispatch => {
+    return Api.post(`/comments/${cid}`, {
+      option: "upVote"
+    })
+      .then(response => {
+        dispatch(postUpVoteCommentSuccess(response.data));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+};
+
+const postUpVoteCommentSuccess = comment => {
+  return {
+    type: POST_UPVOTE_COMMENT_SUCCESS,
+    comment
+  };
+};
+
+export const postDownVoteComment = cid => {
+  return dispatch => {
+    return Api.post(`/comments/${cid}`, { option: "downVote" })
+      .then(response => {
+        dispatch(postDownVoteCommentSuccess(response.data));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+};
+
+const postDownVoteCommentSuccess = comment => {
+  return {
+    type: POST_DOWNVOTE_COMMENT_SUCCESS,
+    comment
   };
 };

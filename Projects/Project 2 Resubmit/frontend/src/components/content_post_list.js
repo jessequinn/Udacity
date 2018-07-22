@@ -26,15 +26,14 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
 // https://github.com/TeamWertarbyte/mdi-material-ui
 // https://materialdesignicons.com
-import {
-  CommentRemove,
-  ThumbDown,
-  ThumbUp,
-  TooltipEdit
-} from "mdi-material-ui";
+import { CommentRemove, ThumbDown, ThumbUp } from "mdi-material-ui";
 
 // components
 import SideBar from "./side_bar.js";
+// import ModalToggle from "./modal_toggle";
+import PostEditModal from "./post_edit_modal";
+import PostEditModalDetail from "./post_edit_modal_detail";
+// import CollectionFormModal from "./collection_form_modal";
 
 // call actions
 import {
@@ -215,13 +214,11 @@ class ContentPostList extends Component {
                           >
                             <ThumbDown className={classes.spacing} />
                           </IconButton>
-                          <IconButton
-                            component={Link}
-                            to={`/${post.category}/${post.id}/edit`}
-                            className={classes.button}
-                          >
-                            <TooltipEdit className={classes.spacing} />
-                          </IconButton>
+                          <PostEditModal
+                            form={post.id}
+                            initialValues={post}
+                            {...this.props}
+                          />
                           <IconButton
                             onClick={() => {
                               onDeleteDeletePost(post.id);
@@ -265,6 +262,7 @@ ContentPostList.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  categories: state.categories,
   posts: state.posts
 });
 

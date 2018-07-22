@@ -11,13 +11,15 @@ import {
   GET_POST_SUCCESS,
   GET_POSTS_SUCCESS,
   GET_COMMENTS_SUCCESS,
-  POST_UPVOTE_POST_SUCCESS,
-  POST_DOWNVOTE_POST_SUCCESS,
   POST_CREATE_POST_SUCCESS,
   PUT_EDIT_POST_SUCCESS,
   DELETE_DELETE_POST_SUCCESS,
   DELETE_DELETE_COMMENT_SUCCESS,
-  GET_POSTS_FOR_CATEGORY_SUCCESS
+  GET_POSTS_FOR_CATEGORY_SUCCESS,
+  POST_UPVOTE_POST_SUCCESS,
+  POST_DOWNVOTE_POST_SUCCESS,
+  POST_UPVOTE_COMMENT_SUCCESS,
+  POST_DOWNVOTE_COMMENT_SUCCESS
 } from "../actions";
 
 const categories = (state = [], action) => {
@@ -60,11 +62,11 @@ const posts = (state = [], action) => {
       });
     case POST_CREATE_POST_SUCCESS:
       return [...state, action.post];
-      case PUT_EDIT_POST_SUCCESS:
+    case PUT_EDIT_POST_SUCCESS:
       return _.map(state, post => {
         if (post.id === action.post.id) {
           return {
-            ...action.post,
+            ...action.post
           };
         } else {
           return post;
@@ -79,6 +81,16 @@ const posts = (state = [], action) => {
   }
 };
 
+const comment = (state = {}, action) => {
+  switch (action.type) {
+    case POST_UPVOTE_COMMENT_SUCCESS:
+    case POST_DOWNVOTE_COMMENT_SUCCESS:
+      return action.comment;
+    default:
+      return state;
+  }
+};
+
 const comments = (state = [], action) => {
   switch (action.type) {
     case GET_COMMENTS_SUCCESS:
@@ -86,6 +98,18 @@ const comments = (state = [], action) => {
     case DELETE_DELETE_COMMENT_SUCCESS:
       return _.filter(state, comment => {
         return comment.id !== action.comment.id;
+      });
+    case POST_UPVOTE_COMMENT_SUCCESS:
+    case POST_DOWNVOTE_COMMENT_SUCCESS:
+      return _.map(state, comment => {
+        if (comment.id === action.comment.id) {
+          return {
+            ...comment,
+            voteScore: action.comment.voteScore
+          };
+        } else {
+          return comment;
+        }
       });
     default:
       return state;
@@ -96,6 +120,7 @@ export default combineReducers({
   categories,
   post,
   posts,
+  comment,
   comments,
   form: formReducer
 });

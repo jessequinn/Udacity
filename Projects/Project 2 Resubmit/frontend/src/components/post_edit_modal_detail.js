@@ -49,7 +49,7 @@ const validate = values => {
   return errors;
 };
 
-class PostEditModal extends Component {
+class PostEditModalDetail extends Component {
   state = {
     open: false
   };
@@ -154,7 +154,7 @@ class PostEditModal extends Component {
               onSubmit={handleSubmit(pdata => {
                 const { title, body, category = categories[0].name } = pdata;
                 pdata = { title, body };
-                putEditPost(initialValues.id, pdata);
+                putEditPost(match.params.post_id, pdata);
                 this.handleClose();
               })}
             >
@@ -216,7 +216,7 @@ class PostEditModal extends Component {
   }
 }
 
-PostEditModal.propTypes = {
+PostEditModalDetail.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
@@ -226,13 +226,13 @@ const mapDispatchToProps = {
 
 // https://stackoverflow.com/questions/38881324/redux-form-initialvalues-not-updating-with-state
 export default reduxForm({
-  fields: ["text"],
-  validate,
-  enableReinitialize: true,
+  form: "PostEditModalDetail",
   destroyOnUnmount: false,
+  validate,
+  enableReinitialize: true
 })(
   connect(
     undefined,
     mapDispatchToProps
-  )(withStyles(styles, { withTheme: true })(PostEditModal))
+  )(withStyles(styles, { withTheme: true })(PostEditModalDetail))
 );
