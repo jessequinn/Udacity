@@ -26,12 +26,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
 // https://github.com/TeamWertarbyte/mdi-material-ui
 // https://materialdesignicons.com
-import {
-  CommentRemove,
-  ThumbDown,
-  ThumbUp,
-  TooltipEdit
-} from "mdi-material-ui";
+import { CommentRemove, ThumbDown, ThumbUp } from "mdi-material-ui";
 
 // components
 import SideBar from "./side_bar.js";
@@ -95,9 +90,9 @@ class ContentPostDetail extends Component {
       onDeleteDeleteComment
     } = this.props;
 
-    !_.find(posts, ["id", match.params.post_id])
-      ? (window.location = "/404")
-      : null;
+    if (!_.find(posts, ["id", match.params.post_id])) {
+      window.location = "/404";
+    }
 
     return (
       <div className={classes.root}>

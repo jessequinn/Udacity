@@ -152,7 +152,7 @@ class PostEditModalDetail extends Component {
           <div style={getModalStyle()} className={classes.paper}>
             <form
               onSubmit={handleSubmit(pdata => {
-                const { title, body, category = categories[0].name } = pdata;
+                const { title, body } = pdata;
                 pdata = { title, body };
                 putEditPost(match.params.post_id, pdata);
                 this.handleClose();

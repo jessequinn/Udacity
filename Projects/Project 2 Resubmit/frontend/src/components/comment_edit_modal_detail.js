@@ -10,9 +10,6 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 
 // https://github.com/TeamWertarbyte/mdi-material-ui
 // https://materialdesignicons.com
@@ -100,7 +97,6 @@ class CommentEditModalDetail extends Component {
       submitting,
       reset,
       handleSubmit,
-      match,
       putEditComment
     } = this.props;
 

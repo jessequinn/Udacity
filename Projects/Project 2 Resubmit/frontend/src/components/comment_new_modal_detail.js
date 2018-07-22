@@ -7,16 +7,8 @@ import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-
-// https://github.com/TeamWertarbyte/mdi-material-ui
-// https://materialdesignicons.com
-import { TooltipEdit } from "mdi-material-ui";
 
 // actions
 import { postCreateComment } from "../actions";
@@ -100,7 +92,6 @@ class CommentNewModalDetail extends Component {
       submitting,
       reset,
       handleSubmit,
-      match,
       postCreateComment
     } = this.props;
 
