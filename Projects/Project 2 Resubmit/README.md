@@ -2,7 +2,7 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
-Several key node modules were installed. Namely, [material-ui](https://material-ui.com), for interface, [mdi-material-ui](https://github.com/TeamWertarbyte/mdi-material-ui), for icons, [redux-form](https://redux-form.com/7.4.2/), for easy form state, and [redux-form-material-ui](https://github.com/erikras/redux-form-material-ui/tree/5.0), for a bridge between redux-form and material-ui.
+Several key node modules were installed. Namely, [material-ui](https://material-ui.com), for interface, [mdi-material-ui](https://github.com/TeamWertarbyte/mdi-material-ui), for icons, [redux-form](https://redux-form.com/7.4.2/), for easy form state, and [axios](https://github.com/axios/axios), for API access.
 
 The general concept of the App is shown in the following figure.
 
