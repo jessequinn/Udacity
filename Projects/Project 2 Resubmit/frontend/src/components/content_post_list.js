@@ -23,6 +23,9 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 // https://github.com/TeamWertarbyte/mdi-material-ui
 // https://materialdesignicons.com
@@ -53,7 +56,9 @@ import { formatDate } from "../utils";
 
 class ContentPostList extends Component {
   state = {
-    open: false
+    open: false,
+    orderByVoteScore: false,
+    orderByTimeStamp: false
   };
 
   handleDrawerOpen = () => {
@@ -62,6 +67,18 @@ class ContentPostList extends Component {
 
   handleDrawerClose = () => {
     this.setState({ open: false });
+  };
+
+  checkOrderByVoteScore = e => {
+    let itemChecked = this.state.orderByVoteScore;
+    itemChecked = e.target.checked;
+    this.setState({ orderByVoteScore: itemChecked });
+  };
+
+  checkOrderByTimeStamp = e => {
+    let itemChecked = this.state.orderByTimeStamp;
+    itemChecked = e.target.checked;
+    this.setState({ orderByTimeStamp: itemChecked });
   };
 
   componentDidMount() {
@@ -85,6 +102,25 @@ class ContentPostList extends Component {
       onPostDownVotePost,
       onDeleteDeletePost
     } = this.props;
+
+    const { orderByVoteScore, orderByTimeStamp } = this.state;
+
+    let sortedPosts;
+    if (orderByVoteScore) {
+      sortedPosts = _.sortBy(posts, [
+        function(o) {
+          return -o.voteScore;
+        }
+      ]);
+    } else if (orderByTimeStamp) {
+      sortedPosts = _.orderBy(posts, ["timestamp"], ["desc"]);
+    } else {
+      sortedPosts = _.sortBy(posts, [
+        function(o) {
+          return o.voteScore;
+        }
+      ]);
+    }
 
     return (
       <div className={classes.root}>
@@ -166,7 +202,43 @@ class ContentPostList extends Component {
                   </Card>
                 </Grid>
               </Grid>
-              {_.map(posts, post => {
+              {_.size(posts) > 1 ? (
+                <Grid container spacing={24}>
+                  <Grid item xs={12}>
+                    <Card className={classes.card}>
+                      <CardContent>
+                        <FormGroup row>
+                          <FormControlLabel
+                            control={
+                              <Switch
+                                onChange={e => this.checkOrderByVoteScore(e)}
+                                disabled={
+                                  orderByTimeStamp === true ? true : null
+                                }
+                                color="primary"
+                              />
+                            }
+                            label="Order by Vote Score (Highest to Lowest)"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Switch
+                                onChange={e => this.checkOrderByTimeStamp(e)}
+                                disabled={
+                                  orderByVoteScore === true ? true : null
+                                }
+                                color="primary"
+                              />
+                            }
+                            label="Order by Time (Newest to Oldest)"
+                          />
+                        </FormGroup>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                </Grid>
+              ) : null}
+              {_.map(sortedPosts, post => {
                 return (
                   <Grid container spacing={24} key={post.id}>
                     <Grid item xs={12}>
@@ -235,7 +307,8 @@ class ContentPostList extends Component {
                           <Badge
                             color="primary"
                             badgeContent={
-                              typeof post.commentCount !== "undefined"
+                              typeof post.commentCount !== "undefined" ||
+                              !isNaN(post.commentCount)
                                 ? post.commentCount
                                 : 0
                             }

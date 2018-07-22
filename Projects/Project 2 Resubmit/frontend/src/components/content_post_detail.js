@@ -220,7 +220,8 @@ class ContentPostDetail extends Component {
                   <Badge
                     color="primary"
                     badgeContent={
-                      typeof post.commentCount !== "undefined"
+                      typeof post.commentCount !== "undefined" ||
+                      !isNaN(post.commentCount)
                         ? post.commentCount
                         : 0
                     }
