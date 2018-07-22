@@ -45,7 +45,10 @@ import {
   deleteDeletePost
 } from "../actions";
 
+// style
 import styles from "../styles";
+
+// util
 import { formatDate } from "../utils";
 
 class ContentPostList extends Component {
@@ -62,7 +65,12 @@ class ContentPostList extends Component {
   };
 
   componentDidMount() {
-    const { match, getPosts, getPostsForCategory, getCategories } = this.props;
+    const {
+      match,
+      getPosts,
+      getPostsForCategory,
+      getCategories
+    } = this.props;
 
     getCategories();
 

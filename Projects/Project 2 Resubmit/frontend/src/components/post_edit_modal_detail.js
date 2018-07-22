@@ -224,6 +224,7 @@ const mapDispatchToProps = {
   putEditPost
 };
 
+// https://github.com/erikras/redux-form/issues/603#issuecomment-295043224
 // https://stackoverflow.com/questions/38881324/redux-form-initialvalues-not-updating-with-state
 export default reduxForm({
   form: "PostEditModalDetail",

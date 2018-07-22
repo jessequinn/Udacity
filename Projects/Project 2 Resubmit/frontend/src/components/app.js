@@ -9,6 +9,7 @@ import { withStyles } from "@material-ui/core/styles";
 import ContentPostList from "./content_post_list";
 import ContentPostForm from "./content_post_form";
 import ContentPostDetail from "./content_post_detail";
+import NoMatch from "./no_match";
 
 // styles
 import styles from "../styles";
@@ -30,6 +31,7 @@ class App extends Component {
             path="/posts/new"
             component={props => <ContentPostForm {...props} />}
           />
+          <Route exact path="/404" component={NoMatch} />
           <Route
             path="/:category"
             exact

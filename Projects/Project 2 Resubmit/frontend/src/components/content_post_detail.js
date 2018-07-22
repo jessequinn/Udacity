@@ -41,6 +41,7 @@ import PostEditModalDetail from "./post_edit_modal_detail";
 import {
   getCategories,
   getPost,
+  getPosts,
   getComments,
   postUpVotePost,
   postDownVotePost,
@@ -67,9 +68,11 @@ class ContentPostDetail extends Component {
   };
 
   componentDidMount() {
-    const { match, getPost, getComments, getCategories } = this.props;
+    const { match, getPost, getPosts, getComments, getCategories } = this.props;
 
     getCategories();
+    getPosts();
+
     getPost(match.params.post_id);
     getComments(match.params.post_id);
   }
@@ -79,6 +82,8 @@ class ContentPostDetail extends Component {
       classes,
       theme,
       post,
+      posts,
+      match,
       comments,
       onPostUpVotePost,
       onPostDownVotePost,
@@ -88,7 +93,10 @@ class ContentPostDetail extends Component {
       onDeleteDeleteComment
     } = this.props;
 
-    // console.log(post);
+    console.log(match.params.post_id);
+    !_.find(posts, ["id", match.params.post_id])
+      ? (window.location = "/404")
+      : null;
 
     return (
       <div className={classes.root}>
@@ -297,12 +305,14 @@ ContentPostDetail.propTypes = {
 const mapStateToProps = state => ({
   categories: state.categories,
   post: state.post,
+  posts: state.posts,
   comments: state.comments
 });
 
 const mapDispatchToProps = {
   getCategories,
   getPost,
+  getPosts,
   getComments,
   onPostUpVotePost: postUpVotePost,
   onPostDownVotePost: postDownVotePost,

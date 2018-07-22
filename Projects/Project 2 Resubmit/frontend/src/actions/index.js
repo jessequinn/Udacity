@@ -22,12 +22,13 @@ export const GET_CATEGORIES_SUCCESS = "GET_CATEGORIES_SUCCESS";
 export const GET_POST_SUCCESS = "GET_POST_SUCCESS";
 export const GET_POSTS_SUCCESS = "GET_POSTS_SUCCESS";
 export const POST_CREATE_POST_SUCCESS = "POST_CREATE_POST_SUCCESS";
-export const DELETE_DELETE_POST_SUCCESS = "DELETE_DELETE_POST_SUCCESS";
 export const GET_POSTS_FOR_CATEGORY_SUCCESS = "GET_POSTS_FOR_CATEGORY_SUCCESS";
 export const PUT_EDIT_POST_SUCCESS = "PUT_EDIT_POST_SUCCESS";
-export const DELETE_DELETE_COMMENT_SUCCESS = "DELETE_DELETE_COMMENT_SUCCESS";
 export const GET_COMMENTS_SUCCESS = "GET_COMMENTS_SUCCESS";
 
+// deleting
+export const DELETE_DELETE_POST_SUCCESS = "DELETE_DELETE_POST_SUCCESS";
+export const DELETE_DELETE_COMMENT_SUCCESS = "DELETE_DELETE_COMMENT_SUCCESS";
 
 // voting
 export const POST_UPVOTE_POST_SUCCESS = "POST_UPVOTE_POST_SUCCESS";
@@ -130,25 +131,6 @@ const postCreatePostSuccess = post => {
   };
 };
 
-export const deleteDeletePost = pid => {
-  return dispatch => {
-    return Api.delete(`/posts/${pid}`)
-      .then(response => {
-        dispatch(deleteDeletePostSuccess(response.data));
-      })
-      .catch(error => {
-        throw error;
-      });
-  };
-};
-
-const deleteDeletePostSuccess = post => {
-  return {
-    type: DELETE_DELETE_POST_SUCCESS,
-    post
-  };
-};
-
 export const putEditPost = (pid, pdata) => {
   return dispatch => {
     return Api.put(`/posts/${pid}`, { ...pdata })
@@ -165,25 +147,6 @@ const putEditPostSuccess = post => {
   return {
     type: PUT_EDIT_POST_SUCCESS,
     post
-  };
-};
-
-export const deleteDeleteComment = cid => {
-  return dispatch => {
-    return Api.delete(`/comments/${cid}`)
-      .then(response => {
-        dispatch(deleteDeleteCommentSuccess(response.data));
-      })
-      .catch(error => {
-        throw error;
-      });
-  };
-};
-
-const deleteDeleteCommentSuccess = comment => {
-  return {
-    type: DELETE_DELETE_COMMENT_SUCCESS,
-    comment
   };
 };
 
@@ -285,6 +248,47 @@ export const postDownVoteComment = cid => {
 const postDownVoteCommentSuccess = comment => {
   return {
     type: POST_DOWNVOTE_COMMENT_SUCCESS,
+    comment
+  };
+};
+
+///////////////////////////////////////
+// Deleting
+///////////////////////////////////////
+export const deleteDeletePost = pid => {
+  return dispatch => {
+    return Api.delete(`/posts/${pid}`)
+      .then(response => {
+        dispatch(deleteDeletePostSuccess(response.data));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+};
+
+const deleteDeletePostSuccess = post => {
+  return {
+    type: DELETE_DELETE_POST_SUCCESS,
+    post
+  };
+};
+
+export const deleteDeleteComment = cid => {
+  return dispatch => {
+    return Api.delete(`/comments/${cid}`)
+      .then(response => {
+        dispatch(deleteDeleteCommentSuccess(response.data));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+};
+
+const deleteDeleteCommentSuccess = comment => {
+  return {
+    type: DELETE_DELETE_COMMENT_SUCCESS,
     comment
   };
 };
