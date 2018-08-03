@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import {
   View,
-  TouchableHighlight,
+  TouchableOpacity,
   Text,
   StyleSheet,
   Platform
@@ -20,20 +20,20 @@ import { submitEntry, removeEntry } from "../utils/api";
 import { connect } from "react-redux";
 import { addEntry } from "../actions";
 import { purple, white } from "../utils/colors";
+import { NavigationActions } from "react-navigation";
 
 function SubmitBtn({ onPress }) {
   return (
-    <TouchableHighlight
+    <TouchableOpacity
       style={
         Platform.OS === "ios" ? styles.iosSubmitBtn : styles.AndroidSubmitBtn
       }
       onPress={onPress}
     >
       <Text style={styles.submitBtnText}>SUBMIT</Text>
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 }
-
 class AddEntry extends Component {
   state = {
     run: 0,
@@ -42,52 +42,6 @@ class AddEntry extends Component {
     sleep: 0,
     eat: 0
   };
-
-  submit = () => {
-    const key = timeToString();
-    const entry = this.state;
-
-    // Update Redux
-    this.props.dispatch(
-      addEntry({
-        [key]: entry
-      })
-    );
-
-    this.setState(() => ({
-      run: 0,
-      bike: 0,
-      swim: 0,
-      sleep: 0,
-      eat: 0
-    }));
-
-    // Navigate to home
-
-    // save to "database"
-
-    submitEntry({ key, entry });
-
-    // clear local notification
-  };
-
-  reset = () => {
-    const key = timeToString();
-
-    // Update Redux
-    this.props.dispatch(
-      addEntry({
-        [key]: getDailyReminderValue()
-      })
-    );
-
-    // Route to Home
-
-    // Update "database"
-
-    removeEntry(key);
-  };
-
   increment = metric => {
     const { max, step } = getMetricMetaInfo(metric);
 
@@ -100,7 +54,6 @@ class AddEntry extends Component {
       };
     });
   };
-
   decrement = metric => {
     this.setState(state => {
       const count = state[metric] - getMetricMetaInfo(metric).step;
@@ -111,13 +64,45 @@ class AddEntry extends Component {
       };
     });
   };
-
   slide = (metric, value) => {
     this.setState(() => ({
       [metric]: value
     }));
   };
+  submit = () => {
+    const key = timeToString();
+    const entry = this.state;
 
+    this.props.dispatch(
+      addEntry({
+        [key]: entry
+      })
+    );
+
+    this.setState(() => ({ run: 0, bike: 0, swim: 0, sleep: 0, eat: 0 }));
+
+    this.toHome();
+
+    submitEntry({ key, entry });
+
+    // Clear local notification
+  };
+  reset = () => {
+    const key = timeToString();
+
+    this.props.dispatch(
+      addEntry({
+        [key]: getDailyReminderValue()
+      })
+    );
+
+    this.toHome();
+
+    removeEntry(key);
+  };
+  toHome = () => {
+    this.props.navigation.dispatch(NavigationActions.back({ key: "AddEntry" }));
+  };
   render() {
     const metaInfo = getMetricMetaInfo();
 
@@ -139,7 +124,6 @@ class AddEntry extends Component {
     return (
       <View style={styles.container}>
         <DateHeader date={new Date().toLocaleDateString()} />
-        {/* <Text>{JSON.stringify(this.state)}</Text> */}
         {Object.keys(metaInfo).map(key => {
           const { getIcon, type, ...rest } = metaInfo[key];
           const value = this.state[key];
@@ -168,14 +152,6 @@ class AddEntry extends Component {
       </View>
     );
   }
-}
-
-function mapStateToProps(state) {
-  const key = timeToString();
-
-  return {
-    alreadyLogged: state[key] && typeof state[key].today === "undefined"
-  };
 }
 
 const styles = StyleSheet.create({
@@ -221,5 +197,13 @@ const styles = StyleSheet.create({
     marginRight: 30
   }
 });
+
+function mapStateToProps(state) {
+  const key = timeToString();
+
+  return {
+    alreadyLogged: state[key] && typeof state[key].today === "undefined"
+  };
+}
 
 export default connect(mapStateToProps)(AddEntry);
