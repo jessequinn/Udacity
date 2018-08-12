@@ -72,11 +72,11 @@ class AddDeck extends Component {
     _saveDeckTitle(value);
     // console.log(value.title)
     this.props.dispatch(_addDeck(value));
-    // this.props.navigation.goBack();
-    this.props.navigation.navigate("DeckView", {
-      _deckTitle: value.title,
-      _deckCardCount: 0
-    });
+    this.props.navigation.goBack();
+    // this.props.navigation.navigate("DeckView", {
+    //   _deckTitle: value.title,
+    //   _deckCardCount: 0
+    // });
     _addCardToDeck(value.title, value.title);
   };
 

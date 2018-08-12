@@ -6,8 +6,10 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  ScrollView
 } from "react-native";
+
 import { List, ListItem, TouchableHighlight } from "react-native-elements";
 import { white, black, lightPurp, orange, blue } from "../utils/colors";
 import { Constants } from "expo";
@@ -95,29 +97,31 @@ class Decks extends Component {
     // console.log(decks);
     return (
       <View>
-        <List>
-          {Object.keys(decks).map((item, i) => (
-            <ListItem
-              component={TouchableOpacity}
-              key={i}
-              title={decks[item].title}
-              subtitle={
-                _.has(decks[item], "questions")
-                  ? `${decks[item].questions.length} cards`
-                  : "0 cards"
-              }
-              hideChevron
-              onPress={() =>
-                this.props.navigation.navigate("DeckView", {
-                  _deckTitle: decks[item].title,
-                  _deckCardCount: _.has(decks[item], "questions")
-                    ? decks[item].questions.length
-                    : 0
-                })
-              }
-            />
-          ))}
-        </List>
+        <ScrollView>
+          <List>
+            {Object.keys(decks).map((item, i) => (
+              <ListItem
+                component={TouchableOpacity}
+                key={i}
+                title={decks[item].title}
+                subtitle={
+                  _.has(decks[item], "questions")
+                    ? `${decks[item].questions.length} cards`
+                    : "0 cards"
+                }
+                hideChevron
+                onPress={() =>
+                  this.props.navigation.navigate("DeckView", {
+                    _deckTitle: decks[item].title,
+                    _deckCardCount: _.has(decks[item], "questions")
+                      ? decks[item].questions.length
+                      : 0
+                  })
+                }
+              />
+            ))}
+          </List>
+        </ScrollView>
       </View>
     );
     w;
