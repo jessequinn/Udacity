@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { View, Platform, StatusBar } from "react-native";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import reducer from "./reducers";
 
 // navigation
 import {
@@ -12,6 +15,7 @@ import { black, purple, white } from "./utils/colors";
 // views
 import Decks from "./components/Decks";
 import AddDeck from "./components/AddDeck";
+import DeckView from "./components/DeckView";
 
 // UI
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
@@ -64,15 +68,26 @@ const Tabs = createBottomTabNavigator(
 const MainNavigator = createStackNavigator({
   Home: {
     screen: Tabs
+  },
+  DeckView: {
+    screen: DeckView,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple
+      }
+    }
   }
 });
 
 export default class App extends Component {
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <MainNavigator />
-      </View>
+      <Provider store={createStore(reducer)}>
+        <View style={{ flex: 1 }}>
+          <MainNavigator />
+        </View>
+      </Provider>
     );
   }
 }

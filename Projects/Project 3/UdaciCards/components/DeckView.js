@@ -13,23 +13,32 @@ import {
   Text
 } from "react-native-elements";
 
-import { white, black, lightPurp, orange, blue } from "../utils/colors";
+import { white, black, lightPurp, orange, blue, purple } from "../utils/colors";
 
-class AddCard extends Component {
+class DeckView extends Component {
   render() {
+    const { navigation } = this.props;
+    const _deckTitle = navigation.getParam("_deckTitle", "Error with title");
+    const _deckCardCount = navigation.getParam(
+      "_deckCardCount",
+      "Error with card count"
+    );
+
     return (
       <View style={styles.container}>
-        <Text h1>NAME OF DECK</Text>
+        <Text h1>{_deckTitle}</Text>
 
         <Badge containerStyle={styles.badge}>
-          <Text># Cards</Text>
+          <Text>
+            {_deckCardCount >= 2 || _deckCardCount === 0 ? `${_deckCardCount} cards` : `${_deckCardCount} card`}
+          </Text>
         </Badge>
 
         <Button
           raised
           icon={{ name: "add-box", color: black }}
           title="Add Card"
-          buttonStyle={styles.button}
+          buttonStyle={[styles.btn, styles.btnWhite]}
           textStyle={{ textAlign: "center", color: black }}
         />
 
@@ -37,23 +46,9 @@ class AddCard extends Component {
           raised
           icon={{ name: "cached", color: white }}
           title="Start Quiz"
-          buttonStyle={styles.buttonInverse}
+          buttonStyle={[styles.btn, styles.btnBlack]}
           textStyle={{ textAlign: "center", color: white }}
         />
-
-        
-        <FormLabel>What is your suggested question?</FormLabel>
-        {/* <FormInput onChangeText={someFunction} /> */}
-        <FormInput />
-        <FormValidationMessage>
-          {"This field is required"}
-        </FormValidationMessage>
-        <FormLabel>Answer to your question.</FormLabel>
-        {/* <FormInput onChangeText={someFunction} /> */}
-        <FormInput />
-        <FormValidationMessage>
-          {"This field is required"}
-        </FormValidationMessage>
       </View>
     );
   }
@@ -67,25 +62,23 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight,
     backgroundColor: white
   },
-  button: {
+  btn: {
     borderRadius: 10,
     marginBottom: 10,
     borderWidth: 0.5,
-    borderColor: black,
+    borderColor: black
+  },
+  btnWhite: {
     backgroundColor: white
   },
-  buttonInverse: {
-    borderRadius: 10,
-    marginBottom: 10,
-    borderWidth: 0.5,
-    borderColor: black,
-    backgroundColor: black
+  btnBlack: {
+    backgroundColor: purple
   },
   badge: {
     borderRadius: 10,
-    marginBottom: 10,
-    backgroundColor: lightPurp
+    marginBottom: 150,
+    backgroundColor: purple
   }
 });
 
-export default AddCard;
+export default DeckView;

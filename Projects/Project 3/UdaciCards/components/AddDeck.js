@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import { View, StyleSheet } from "react-native";
 import { Constants } from "expo";
+import { connect } from "react-redux";
+
+// helpers
+import { _saveDeckTitle, _addCardToDeck } from "../utils/helpers";
+
+import { _addDeck, _getDecks } from "../actions";
 
 // UI
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -13,32 +19,81 @@ import {
   Text
 } from "react-native-elements";
 
-import { white, black, lightPurp, orange, blue } from "../utils/colors";
+// following form design from https://medium.com/react-native-development/easily-build-forms-in-react-native-9006fcd2a73b
+import t from "tcomb-form-native";
+
+import { white, black, purple } from "../utils/colors";
+
+// related to form setup
+
+const Form = t.form.Form;
+
+const _deckTitle = t.struct({
+  title: t.String
+});
+
+const _formStyles = {
+  ...Form.stylesheet,
+  formGroup: {
+    normal: {
+      marginBottom: 10
+    }
+  },
+  controlLabel: {
+    normal: {
+      color: purple,
+      fontSize: 18,
+      marginBottom: 7,
+      fontWeight: "600"
+    },
+    // the style applied when a validation error occours
+    error: {
+      color: "red",
+      fontSize: 18,
+      marginBottom: 7,
+      fontWeight: "600"
+    }
+  }
+};
+
+const _options = {
+  fields: {
+    title: {
+      error: "You will need a title!",
+      label: "What is the title of your new deck?"
+    }
+  },
+  stylesheet: _formStyles
+};
 
 class AddDeck extends Component {
+  _handleSubmit = () => {
+    const value = this._form.getValue();
+    _saveDeckTitle(value);
+    // console.log(value.title)
+    this.props.dispatch(_addDeck(value));
+    // this.props.navigation.goBack();
+    this.props.navigation.navigate("DeckView", {
+      _deckTitle: value.title,
+      _deckCardCount: 0
+    });
+    _addCardToDeck(value.title, value.title);
+  };
+
   render() {
     return (
       <View style={styles.container}>
-        <Text h1>NAME OF DECK</Text>
-
-        <Badge containerStyle={styles.badge}>
-          <Text># cards</Text>
-        </Badge>
-
-        <Button
-          raised
-          icon={{ name: "add-box", color: black }}
-          title="Add Card"
-          buttonStyle={[styles.btn, styles.btnWhite]}
-          textStyle={{ textAlign: "center", color: black }}
+        <Form
+          ref={c => (this._form = c)}
+          type={_deckTitle}
+          options={_options}
         />
-
         <Button
           raised
-          icon={{ name: "cached", color: white }}
-          title="Start Quiz"
-          buttonStyle={[styles.btn, styles.btnBlack]}
+          title="Submit"
+          buttonStyle={styles.btn}
           textStyle={{ textAlign: "center", color: white }}
+          onPress={this._handleSubmit}
         />
       </View>
     );
@@ -56,20 +111,16 @@ const styles = StyleSheet.create({
   btn: {
     borderRadius: 10,
     marginBottom: 10,
-    borderWidth: 0.5,    
-    borderColor: black
-  },
-  btnWhite: {
-    backgroundColor: white
-  },
-  btnBlack: {
-    backgroundColor: black
-  },
-  badge: {
-    borderRadius: 10,
-    marginBottom: 150,
-    backgroundColor: lightPurp
+    borderWidth: 0.5,
+    borderColor: black,
+    backgroundColor: purple
   }
 });
 
-export default AddDeck;
+function mapStateToProps(decks) {
+  return {
+    decks
+  };
+}
+
+export default connect(mapStateToProps)(AddDeck);
