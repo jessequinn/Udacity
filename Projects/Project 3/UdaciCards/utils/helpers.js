@@ -34,9 +34,9 @@ export function _addCardToDeck(title, card) {
     const data = JSON.parse(results);
     // console.log(data[title]);
     data[title].questions.push(card);
-    console.log(data[title]);
+    // console.log(data[title]);
     // data[title] = undefined;
     // delete data[title];
-    // AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(data));
+    AsyncStorage.setItem(DECKS_STORAGE_KEY, JSON.stringify(data));
   });
 }

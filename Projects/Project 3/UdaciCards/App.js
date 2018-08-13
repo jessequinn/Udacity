@@ -68,11 +68,19 @@ const Tabs = createBottomTabNavigator(
 
 const MainNavigator = createStackNavigator({
   Home: {
-    screen: Tabs
+    screen: Tabs,
+    navigationOptions: {
+      headerTitle: "Udacicards - Jesse Quinn",
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple
+      }
+    }
   },
   DeckView: {
     screen: DeckView,
     navigationOptions: {
+      headerTitle: "Deck Contents",
       headerTintColor: white,
       headerStyle: {
         backgroundColor: purple
@@ -82,6 +90,7 @@ const MainNavigator = createStackNavigator({
   AddCard: {
     screen: AddCard,
     navigationOptions: {
+      headerTitle: "Add New Card",
       headerTintColor: white,
       headerStyle: {
         backgroundColor: purple

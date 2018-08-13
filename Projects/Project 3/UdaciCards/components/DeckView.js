@@ -1,6 +1,9 @@
+import _ from "lodash";
+
 import React, { Component } from "react";
 import { View, StyleSheet } from "react-native";
 import { Constants } from "expo";
+import { connect } from "react-redux";
 
 // UI
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -17,12 +20,13 @@ import { white, black, orange, blue, purple } from "../utils/colors";
 
 class DeckView extends Component {
   render() {
-    const { navigation } = this.props;
+    const { navigation, decks } = this.props;
     const _deckTitle = navigation.getParam("_deckTitle", "Error with title");
-    const _deckCardCount = navigation.getParam(
-      "_deckCardCount",
-      "Error with card count"
-    );
+    const _deckCardCount = _.has(decks[_deckTitle], "questions")
+      ? decks[_deckTitle].questions.length
+      : 0;
+
+    // console.log(decks);
 
     return (
       <View style={styles.container}>
@@ -88,4 +92,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default DeckView;
+function mapStateToProps(decks) {
+  return {
+    decks
+  };
+}
+
+export default connect(mapStateToProps)(DeckView);

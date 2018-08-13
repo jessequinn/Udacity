@@ -96,7 +96,7 @@ class Decks extends Component {
 
     // console.log(decks);
     return (
-      <View>
+      <View style={styles.container}>
         <ScrollView>
           <List>
             {Object.keys(decks).map((item, i) => (
@@ -112,10 +112,7 @@ class Decks extends Component {
                 hideChevron
                 onPress={() =>
                   this.props.navigation.navigate("DeckView", {
-                    _deckTitle: decks[item].title,
-                    _deckCardCount: _.has(decks[item], "questions")
-                      ? decks[item].questions.length
-                      : 0
+                    _deckTitle: decks[item].title
                   })
                 }
               />
@@ -131,9 +128,7 @@ class Decks extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: Constants.statusBarHeight,
+    paddingTop: Constants.statusBarHeight0,
     backgroundColor: white
   },
   btn: {

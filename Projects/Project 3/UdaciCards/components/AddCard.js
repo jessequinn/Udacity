@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 // helpers
 import { _saveDeckTitle, _addCardToDeck } from "../utils/helpers";
 
-import { _addDeck, _getDecks } from "../actions";
+import { _addCard } from "../actions";
 
 // UI
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -77,8 +77,23 @@ class AddCard extends Component {
     if (value) {
       const { navigation } = this.props;
       const _deckTitle = navigation.getParam("_deckTitle", "Error with title");
-      _addCardToDeck(_deckTitle, value);
-      this.props.dispatch(_addCard(_deckTitle, value.question, value.answer));
+
+      _deck = {
+        title: _deckTitle,
+        questions: [
+          {
+            question: value.question,
+            answer: value.answer
+          }
+        ]
+      };
+
+      _addCardToDeck(_deck.title, _deck.questions[0]);
+
+      // console.log(_deck);
+      this.props.dispatch(_addCard(_deck));
+      // console.log(this.props.decks);
+      this.props.navigation.goBack();
     }
   };
 
