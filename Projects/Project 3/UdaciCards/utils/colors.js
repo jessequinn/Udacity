@@ -9,6 +9,8 @@ export const white = "#fff";
 
 export const red = "#b71845";
 
+export const green = "#19c68d";
+
 // export const orange = "#f26f28";
 
 export const orange = "#ffa426";

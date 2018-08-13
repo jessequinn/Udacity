@@ -22,15 +22,13 @@ class DeckView extends Component {
   render() {
     const { navigation, decks } = this.props;
     const _deckTitle = navigation.getParam("_deckTitle", "Error with title");
-    const _deckCardCount = _.has(decks[_deckTitle], "questions")
-      ? decks[_deckTitle].questions.length
-      : 0;
+    const _deckCardCount = decks[_deckTitle].questions.length;
 
     // console.log(decks);
 
     return (
       <View style={styles.container}>
-        <Text h1>{_deckTitle}</Text>
+        <Text h2>{_deckTitle}</Text>
 
         <Badge containerStyle={styles.badge}>
           <Text>
@@ -52,14 +50,21 @@ class DeckView extends Component {
             })
           }
         />
-
-        <Button
-          raised
-          icon={{ name: "cached", color: white }}
-          title="Start Quiz"
-          buttonStyle={[styles.btn, styles.btnBlack]}
-          textStyle={{ textAlign: "center", color: white }}
-        />
+        {_deckCardCount >= 1 && (
+          <Button
+            raised
+            icon={{ name: "cached", color: white }}
+            title="Start Quiz"
+            buttonStyle={[styles.btn, styles.btnBlack]}
+            textStyle={{ textAlign: "center", color: white }}
+            onPress={() =>
+              this.props.navigation.navigate("QuizView", {
+                _deckTitle,
+                _cards: decks[_deckTitle].questions
+              })
+            }
+          />
+        )}
       </View>
     );
   }

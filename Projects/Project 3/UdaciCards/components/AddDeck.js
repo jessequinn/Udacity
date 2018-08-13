@@ -73,11 +73,11 @@ class AddDeck extends Component {
     if (value) {
       _saveDeckTitle(value.title);
       this.props.dispatch(_addDeck(value.title));
-      this.props.navigation.goBack();
-      // this.props.navigation.navigate("DeckView", {
-      //   _deckTitle: value.title,
-      //   _deckCardCount: 0
-      // });
+      // this.props.navigation.goBack();
+      this.props.navigation.navigate("DeckView", {
+        _deckTitle: value.title,
+        _deckCardCount: 0
+      });
     }
   };
 
@@ -91,7 +91,7 @@ class AddDeck extends Component {
         />
         <Button
           raised
-          title="Submit"
+          title="Create Deck"
           buttonStyle={styles.btn}
           textStyle={{ textAlign: "center", color: white }}
           onPress={this._handleSubmit}
