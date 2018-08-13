@@ -97,6 +97,7 @@ class Decks extends Component {
 
   componentWillMount() {
     // this._clear();
+    // clearLocalNotification();
     this._loadInitialDecks().done();
   }
 

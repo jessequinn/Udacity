@@ -3,6 +3,7 @@ import { View, Platform, StatusBar } from "react-native";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 import reducer from "./reducers";
+import { setLocalNotification } from "./utils/helpers";
 
 // navigation
 import {
@@ -111,6 +112,10 @@ const MainNavigator = createStackNavigator({
 });
 
 export default class App extends Component {
+  componentDidMount() {
+    setLocalNotification();
+  }
+
   render() {
     return (
       <Provider store={createStore(reducer)}>

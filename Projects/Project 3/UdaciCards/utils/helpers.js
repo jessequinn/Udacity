@@ -59,16 +59,10 @@ export function getDailyReminderValue() {
   };
 }
 
-export function clearLocalNotification() {
-  return AsyncStorage.removeItem(NOTIFICATION_KEY).then(
-    Notifications.cancelAllScheduledNotificationsAsync
-  );
-}
-
 function createNotification() {
   return {
     title: "Do a quiz!",
-    body: "Hi, don't forget to do quiz for today!",
+    body: "Hi, don't forget to do a quiz for today!",
     ios: {
       sound: true
     },
@@ -92,7 +86,7 @@ export function setLocalNotification() {
 
             let tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
-            tomorrow.setHours(20);
+            tomorrow.setHours(10);
             tomorrow.setMinutes(0);
 
             Notifications.scheduleLocalNotificationAsync(createNotification(), {
@@ -105,4 +99,10 @@ export function setLocalNotification() {
         });
       }
     });
+}
+
+export function clearLocalNotification() {
+  return AsyncStorage.removeItem(NOTIFICATION_KEY).then(
+    Notifications.cancelAllScheduledNotificationsAsync
+  );
 }
