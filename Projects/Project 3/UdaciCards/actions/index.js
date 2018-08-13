@@ -14,3 +14,10 @@ export function _addDeck(deck) {
     deck
   };
 }
+
+export function _addDeck(deck) {
+  return {
+    type: ADD_DECK_SUCCESS,
+    deck
+  };
+}

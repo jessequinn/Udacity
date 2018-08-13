@@ -10,7 +10,10 @@ const decks = (state = {}, action) => {
     case ADD_DECK_SUCCESS:
       return {
         ...state,
-        object: action.deck
+        [action.deck]: {
+          title: action.deck,
+          questions: []
+        }
       };
     default:
       return state;

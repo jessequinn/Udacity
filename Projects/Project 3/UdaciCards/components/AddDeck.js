@@ -69,15 +69,16 @@ const _options = {
 class AddDeck extends Component {
   _handleSubmit = () => {
     const value = this._form.getValue();
-    _saveDeckTitle(value);
-    // console.log(value.title)
-    this.props.dispatch(_addDeck(value));
-    this.props.navigation.goBack();
-    // this.props.navigation.navigate("DeckView", {
-    //   _deckTitle: value.title,
-    //   _deckCardCount: 0
-    // });
-    _addCardToDeck(value.title, value.title);
+
+    if (value) {
+      _saveDeckTitle(value.title);
+      this.props.dispatch(_addDeck(value.title));
+      this.props.navigation.goBack();
+      // this.props.navigation.navigate("DeckView", {
+      //   _deckTitle: value.title,
+      //   _deckCardCount: 0
+      // });
+    }
   };
 
   render() {

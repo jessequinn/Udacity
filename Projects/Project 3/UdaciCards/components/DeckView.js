@@ -13,7 +13,7 @@ import {
   Text
 } from "react-native-elements";
 
-import { white, black, lightPurp, orange, blue, purple } from "../utils/colors";
+import { white, black, orange, blue, purple } from "../utils/colors";
 
 class DeckView extends Component {
   render() {
@@ -30,7 +30,9 @@ class DeckView extends Component {
 
         <Badge containerStyle={styles.badge}>
           <Text>
-            {_deckCardCount >= 2 || _deckCardCount === 0 ? `${_deckCardCount} cards` : `${_deckCardCount} card`}
+            {_deckCardCount >= 2 || _deckCardCount === 0
+              ? `${_deckCardCount} cards`
+              : `${_deckCardCount} card`}
           </Text>
         </Badge>
 
@@ -40,6 +42,11 @@ class DeckView extends Component {
           title="Add Card"
           buttonStyle={[styles.btn, styles.btnWhite]}
           textStyle={{ textAlign: "center", color: black }}
+          onPress={() =>
+            this.props.navigation.navigate("AddCard", {
+              _deckTitle
+            })
+          }
         />
 
         <Button

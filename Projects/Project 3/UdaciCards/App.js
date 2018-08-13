@@ -16,6 +16,7 @@ import { black, purple, white } from "./utils/colors";
 import Decks from "./components/Decks";
 import AddDeck from "./components/AddDeck";
 import DeckView from "./components/DeckView";
+import AddCard from "./components/AddCard";
 
 // UI
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
@@ -71,6 +72,15 @@ const MainNavigator = createStackNavigator({
   },
   DeckView: {
     screen: DeckView,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple
+      }
+    }
+  },
+  AddCard: {
+    screen: AddCard,
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {
