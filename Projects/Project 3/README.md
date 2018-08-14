@@ -1,6 +1,6 @@
 ## Readable Project
 
-This project was bootstrapped with [Create React Native App](create react native app tutorial).
+This project was bootstrapped with [Create React Native App](https://github.com/react-community/create-react-native-app).
 
 Several key node modules were installed. Namely, [expo](https://expo.io), for emulation, notifications, etc., [react-native-elements](https://react-native-training.github.io/react-native-elements/), for UI, and [redux](https://redux.js.org), for state handling along with [react-redux](https://github.com/reduxjs/react-redux), [tcomb-form-native](https://github.com/gcanti/tcomb-form-native) for forms, and [lodash](https://lodash.com) for object manipulation, iteration, etc.
 
