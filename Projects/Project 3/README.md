@@ -11,11 +11,11 @@ The general concept of the App is shown in the following figure.
 ![alt text](./concept.png)
 
 ## Installation and Running
-Within the `frontend` directory run the following commands:
+Within the `udacicards` directory run the following commands:
 * `npm install` will install all node modules required for the project.
 * `npm start` or `yarn start` will begin the Readable App.
 
-To run the background server, run the following command in the `api-server` directory `node server.js`.
+To use expo, please install xcode and command line tools. Homebrew on OSX may be used to install watchman `brew install watchman` for memory allocation control.
 
 ## Folder Structure
 
