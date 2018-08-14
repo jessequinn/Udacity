@@ -17,6 +17,8 @@ Within the `udacicards` directory run the following commands:
 
 To use expo, please install xcode and command line tools. Homebrew on OSX may be used to install watchman `brew install watchman` for memory allocation control.
 
+**Testing was not conducted on Android or Android Emulators.**
+
 ## Folder Structure
 
 After creation, your project should look like this:
