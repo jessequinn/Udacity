@@ -3,9 +3,11 @@
 // getDeck: take in a single id argument and return the deck associated with that id.
 // saveDeckTitle: take in a single title argument and add it to the decks.
 // addCardToDeck: take in two arguments, title and card, and will add the card to the list of questions for the deck with the associated title.
+import React from "react";
 
 import { AsyncStorage } from "react-native";
 import { Notifications, Permissions } from "expo";
+import moment from "moment";
 
 export const NOTIFICATION_KEY = "Udacicards:notifications";
 export const DECKS_STORAGE_KEY = "Udacicards:key";
@@ -44,25 +46,12 @@ export function _addCardToDeck(title, card) {
   });
 }
 
-// based on code from React Native lesson.
-export function timeToString(time = Date.now()) {
-  const date = new Date(time);
-  const todayUTC = new Date(
-    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
-  );
-  return todayUTC.toISOString().split("T")[0];
-}
-
-export function getDailyReminderValue() {
-  return {
-    today: "👋 Don't forget to log your data today!"
-  };
-}
-
-function createNotification() {
-  return {
+// based on code from React Native lesson and https://snack.expo.io/SyChaK8Hb
+export function _setLocalNotification() {
+  const _localNotification = {
     title: "Do a quiz!",
     body: "Hi, don't forget to do a quiz for today!",
+    data: { type: "delayed" },
     ios: {
       sound: true
     },
@@ -73,26 +62,41 @@ function createNotification() {
       vibrate: true
     }
   };
-}
 
-export function setLocalNotification() {
+  // set time for next day at 9 am
+  let tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(9);
+  tomorrow.setMinutes(0);
+
+  const _schedulingOptions = {
+    time: tomorrow,
+    repeat: "day"
+  };
+
   AsyncStorage.getItem(NOTIFICATION_KEY)
     .then(JSON.parse)
     .then(data => {
+      // console.info(data);
       if (data === null) {
         Permissions.askAsync(Permissions.NOTIFICATIONS).then(({ status }) => {
+          // console.info(status);
           if (status === "granted") {
+            console.info(status);
             Notifications.cancelAllScheduledNotificationsAsync();
 
-            let tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            tomorrow.setHours(10);
-            tomorrow.setMinutes(0);
-
-            Notifications.scheduleLocalNotificationAsync(createNotification(), {
-              time: tomorrow,
-              repeat: "day"
-            });
+            Notifications.scheduleLocalNotificationAsync(
+              _localNotification,
+              _schedulingOptions
+            )
+              .then(id =>
+                console.info(
+                  `Delayed notification scheduled (${id}) at ${moment(
+                    _schedulingOptions.time
+                  ).format()}`
+                )
+              )
+              .catch(err => console.error(err));
 
             AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true));
           }
@@ -101,7 +105,7 @@ export function setLocalNotification() {
     });
 }
 
-export function clearLocalNotification() {
+export function _clearLocalNotification() {
   return AsyncStorage.removeItem(NOTIFICATION_KEY).then(
     Notifications.cancelAllScheduledNotificationsAsync
   );

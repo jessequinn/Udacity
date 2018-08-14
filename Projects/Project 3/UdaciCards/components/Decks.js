@@ -3,7 +3,6 @@ import _ from "lodash";
 import React, { Component } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
   AsyncStorage,
@@ -15,16 +14,14 @@ import { white, black, lightPurp, orange, blue } from "../utils/colors";
 import { Constants } from "expo";
 
 import { connect } from "react-redux";
-import { _addDeck, _getDecks } from "../actions";
+import { _getDecks } from "../actions";
 
-import { DECKS_STORAGE_KEY } from "../utils/helpers";
-
+import { DECKS_STORAGE_KEY, _clearLocalNotification } from "../utils/helpers";
 
 // UI
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 // initialization of decks follows sample here: https://stackoverflow.com/questions/33553112/react-native-asyncstorage-fetches-data-after-rendering/33644537
-
 class Decks extends Component {
   // in case of error with DB, clear all contents for a specific key.
   _clear = async () => {
@@ -89,7 +86,7 @@ class Decks extends Component {
 
   componentWillMount() {
     // this._clear();
-    // clearLocalNotification();
+    // _clearLocalNotification();
     this._loadInitialDecks().done();
   }
 

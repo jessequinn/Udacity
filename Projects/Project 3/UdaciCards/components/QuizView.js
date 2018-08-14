@@ -5,7 +5,7 @@ import { View, StyleSheet } from "react-native";
 import { Constants } from "expo";
 import { connect } from "react-redux";
 
-import { clearLocalNotification, setLocalNotification } from "../utils/helpers";
+import { _clearLocalNotification, _setLocalNotification } from "../utils/helpers";
 
 // UI
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -49,12 +49,14 @@ class QuizView extends Component {
     const _deckTitle = navigation.getParam("_deckTitle", "Error with title");
     const _deckCardCount = decks[_deckTitle].questions.length;
 
+    // remove notification for the day
+    _clearLocalNotification().then(_setLocalNotification);
+
     // console.log(correct);
     return (
       <View style={styles.container}>
         {correct + incorrect === _cards.length && (
           <View style={styles.container}>
-            {clearLocalNotification().then(setLocalNotification)}
             <Text h3 style={[styles.txt, styles.bump]}>
               Your Score: {correct} / {index + 1}
             </Text>

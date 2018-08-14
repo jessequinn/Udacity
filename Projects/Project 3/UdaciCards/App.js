@@ -3,13 +3,15 @@ import { View, Platform, StatusBar } from "react-native";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 import reducer from "./reducers";
-import { setLocalNotification } from "./utils/helpers";
+import { _setLocalNotification } from "./utils/helpers";
 
 // navigation
 import {
   createBottomTabNavigator,
   createStackNavigator
 } from "react-navigation";
+
+import { Notifications } from "expo";
 
 import { black, purple, white } from "./utils/colors";
 
@@ -37,6 +39,7 @@ const Tabs = createBottomTabNavigator(
     AddDeck: {
       screen: AddDeck,
       navigationOptions: {
+        headerTitle: "New Deck",
         tabBarLabel: "AddDeck",
         tabBarIcon: ({ tintColor }) => (
           <MaterialIcons name="add-box" size={30} color={tintColor} />
@@ -72,7 +75,7 @@ const MainNavigator = createStackNavigator({
   Home: {
     screen: Tabs,
     navigationOptions: {
-      headerTitle: "Udacicards - Jesse Quinn",
+      headerTitle: "Deck",
       headerTintColor: white,
       headerStyle: {
         backgroundColor: purple
@@ -113,8 +116,14 @@ const MainNavigator = createStackNavigator({
 
 export default class App extends Component {
   componentDidMount() {
-    setLocalNotification();
+    _setLocalNotification();
+
+    Notifications.addListener(this._handleNotification);
   }
+
+  _handleNotification = ({ origin, data }) => {
+    console.log(`Notification (${origin}) with data: ${JSON.stringify(data)}`);
+  };
 
   render() {
     return (
